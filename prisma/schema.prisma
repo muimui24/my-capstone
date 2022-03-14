@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model a_user {
+  id               Int                @id
+  isActive         Boolean?
+  createdby        String             @db.VarChar(255)
+  creationDate     DateTime?          @db.DateTime(0)
+  modifiedBy       String?            @db.VarChar(255)
+  modificationDate DateTime?          @db.DateTime(0)
+  firstName        String             @db.VarChar(255)
+  lastName         String             @db.VarChar(255)
+  middleName       String             @db.VarChar(255)
+ 
+  contactNumber    String             @db.VarChar(255)
+
+  role             String             @db.VarChar(255)
+  password         String             @db.VarChar(255)
+  
+  email            String             @unique(map: "email") @db.VarChar(255)
+  t_borrowingbooks t_borrowingbooks[]
+}
+
+model m_books {
+  id               Int                @id
+  isActive         Boolean?
+  createdby        String             @db.VarChar(255)
+  creationDate     DateTime?          @db.DateTime(0)
+  modifiedBy       String?            @db.VarChar(255)
+  modificationDate DateTime?          @db.DateTime(0)
+  title            String             @db.VarChar(255)
+  author           String             @db.VarChar(255)
+  description      String?            @db.VarChar(255)
+  downloadLink     String?            @db.VarChar(255)
+  isEbook          Boolean?
+  rating           Int?
+  m_booksInventory m_booksInventory[]
+  t_borrowingbooks t_borrowingbooks[]
+  t_ebookdownloads t_ebookdownloads[]
+}
+
+model m_booksInventory {
+  id               Int                @id
+  isActive         Boolean?
+  createdby        String             @db.VarChar(255)
+  creationDate     DateTime?          @db.DateTime(0)
+  modifiedBy       String?            @db.VarChar(255)
+  modificationDate DateTime?          @db.DateTime(0)
+  headerId         Int
+  code             String             @unique(map: "code") @db.VarChar(255)
+  m_books          m_books            @relation(fields: [headerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "booksInventoryRelationship")
+  t_borrowingbooks t_borrowingbooks[]
+
+  @@index([headerId], map: "booksInventoryRelationship")
+}
+
+model m_masterTable {
+  id                  Int                  @id
+  title               String               @unique(map: "title") @db.VarChar(255)
+  note                String?              @db.VarChar(255)
+  isActive            Boolean?
+  createdby           String               @db.VarChar(255)
+  creationDate        DateTime?            @db.DateTime(0)
+  modifiedBy          String?              @db.VarChar(255)
+  modificationDate    DateTime?            @db.DateTime(0)
+  m_masterTableValues m_masterTableValues?
+}
+
+model m_masterTableValues {
+  id               Int           @id
+  isActive         Boolean?
+  createdby        String        @db.VarChar(255)
+  creationDate     DateTime?     @db.DateTime(0)
+  modifiedBy       String?       @db.VarChar(255)
+  modificationDate DateTime?     @db.DateTime(0)
+  title            String        @db.VarChar(255)
+  headerId         Int
+  m_masterTable    m_masterTable @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "m_masterTableRelationship")
+}
+
+model t_borrowingbooks {
+  id                 Int              @id
+  isActive           Boolean?
+  createdby          String           @db.VarChar(255)
+  creationDate       DateTime?        @db.DateTime(0)
+  modifiedBy         String?          @db.VarChar(255)
+  modificationDate   DateTime?        @db.DateTime(0)
+  userId             Int
+  borrowingDate      DateTime         @db.DateTime(0)
+  issuedDate         DateTime         @db.DateTime(0)
+  targetreturnDate   DateTime         @db.DateTime(0)
+  actualDateReturned DateTime?        @db.DateTime(0)
+  isReturned         Boolean?
+  isCancelled        Boolean?
+  bookId             Int
+  bookCode           String           @db.VarChar(255)
+  note               String?          @db.VarChar(255)
+  m_booksInventory   m_booksInventory @relation(fields: [bookCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "borrowingbookinventory")
+  m_books            m_books          @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingbookrel")
+  a_user             a_user           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingUser")
+
+  @@index([userId], map: "borrowingUser")
+  @@index([bookCode], map: "borrowingbookinventory")
+  @@index([bookId], map: "borrowingbookrel")
+}
+
+model t_ebookdownloads {
+  id               Int       @id
+  isActive         Boolean?
+  createdby        String    @db.VarChar(255)
+  creationDate     DateTime? @db.DateTime(0)
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @db.DateTime(0)
+  bookId           Int
+  m_books          m_books   @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ebookdownloads")
+
+  @@index([bookId], map: "ebookdownloads")
+}
+
+model testuser {
+  id       Int    @id
+  username String
+  password String
+}

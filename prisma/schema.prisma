@@ -10,7 +10,7 @@ datasource db {
 
 
 model a_user {
-  id               Int                @id
+  id               Int                @id @default(autoincrement())
   isActive         Boolean?
   createdby        String             @db.VarChar(255)
   creationDate     DateTime?          @db.DateTime(0)
@@ -30,25 +30,40 @@ model a_user {
 }
 
 model m_books {
-  id               Int                @id
+  id                Int              @id @default(autoincrement())
+   title            String             @db.VarChar(255)
+  author           String             @db.VarChar(255)
+  description      String?            @db.VarChar(255)
+  code             String
   isActive         Boolean?
-  createdby        String             @db.VarChar(255)
+  createdby        String   ?          @db.VarChar(255)
   creationDate     DateTime?          @db.DateTime(0)
   modifiedBy       String?            @db.VarChar(255)
   modificationDate DateTime?          @db.DateTime(0)
-  title            String             @db.VarChar(255)
-  author           String             @db.VarChar(255)
-  description      String?            @db.VarChar(255)
-  downloadLink     String?            @db.VarChar(255)
-  isEbook          Boolean?
-  rating           Int?
+   category            String
+ 
   m_booksInventory m_booksInventory[]
   t_borrowingbooks t_borrowingbooks[]
   t_ebookdownloads t_ebookdownloads[]
 }
+model m_ebooks {
+  id               Int                @id @default(autoincrement())
+  title            String             @db.VarChar(255)
+  author           String             @db.VarChar(255)
+  description      String?            @db.VarChar(255)
+  downloadLink     String?            @db.VarChar(255)
+  rating           Int?
+   isActive         Boolean?
+    category             String
+  createdby        String             @db.VarChar(255)
+  creationDate     DateTime?          @db.DateTime(0)
+  modifiedBy       String?            @db.VarChar(255)
+  modificationDate DateTime?          @db.DateTime(0)
+  
+}
 
 model m_booksInventory {
-  id               Int                @id
+  id               Int                @id @default(autoincrement())
   isActive         Boolean?
   createdby        String             @db.VarChar(255)
   creationDate     DateTime?          @db.DateTime(0)
@@ -63,7 +78,7 @@ model m_booksInventory {
 }
 
 model m_masterTable {
-  id                  Int                  @id
+  id                  Int                  @id @default(autoincrement())
   title               String               @unique(map: "title") @db.VarChar(255)
   note                String?              @db.VarChar(255)
   isActive            Boolean?
@@ -75,7 +90,7 @@ model m_masterTable {
 }
 
 model m_masterTableValues {
-  id               Int           @id
+  id               Int           @id @default(autoincrement())
   isActive         Boolean?
   createdby        String        @db.VarChar(255)
   creationDate     DateTime?     @db.DateTime(0)
@@ -87,13 +102,13 @@ model m_masterTableValues {
 }
 
 model t_borrowingbooks {
-  id                 Int              @id
+  id                 Int              @id @default(autoincrement())
   isActive           Boolean?
   createdby          String           @db.VarChar(255)
   creationDate       DateTime?        @db.DateTime(0)
   modifiedBy         String?          @db.VarChar(255)
   modificationDate   DateTime?        @db.DateTime(0)
-  userId             Int
+  userId             Int 
   borrowingDate      DateTime         @db.DateTime(0)
   issuedDate         DateTime         @db.DateTime(0)
   targetreturnDate   DateTime         @db.DateTime(0)
@@ -113,7 +128,7 @@ model t_borrowingbooks {
 }
 
 model t_ebookdownloads {
-  id               Int       @id
+  id               Int       @id @default(autoincrement())
   isActive         Boolean?
   createdby        String    @db.VarChar(255)
   creationDate     DateTime? @db.DateTime(0)
@@ -129,4 +144,19 @@ model testuser {
   id       Int    @id
   username String
   password String
+}
+model l_books {
+  id               String           @id @default(cuid()) 
+   title            String             @db.VarChar(255)
+  author           String             @db.VarChar(255)
+  description      String?            @db.VarChar(255)
+  code             String
+  isActive         Boolean?
+  createdby        String   ?          @db.VarChar(255)
+  creationDate     DateTime?          @db.DateTime(0)
+  modifiedBy       String?            @db.VarChar(255)
+  modificationDate DateTime?          @db.DateTime(0)
+   category            String
+ 
+
 }

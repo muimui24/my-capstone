@@ -21,6 +21,13 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { signIn, signOut, useSession } from "next-auth/react";
+import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { useRouter } from "next/router";
+import { red } from "@mui/material/colors";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 
 const drawerWidth = 240;
 
@@ -104,12 +111,17 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const router = useRouter();
 
   return (
     <SessionProvider session={session} refetchInterval={5 * 60}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="fixed" open={open}>
+        <AppBar
+          sx={{ backgroundColor: "#2196f3" }}
+          position="fixed"
+          open={open}
+        >
           <Toolbar>
             <IconButton
               color="inherit"
@@ -124,15 +136,19 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
               <MenuIcon />
             </IconButton>
 
-            <Typography variant="h6" noWrap component="div">
-              Mini variant drawer
+            <Typography variant="h6" noWrap component="div" m="10px">
+              ONLINE LIBRARY
             </Typography>
             <button type="button" onClick={() => signOut()}>
               Sign Out
             </button>
           </Toolbar>{" "}
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer
+          variant="permanent"
+          open={open}
+          sx={{ backgroundColor: "#e3f2fd" }}
+        >
           <DrawerHeader>
             <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
@@ -144,27 +160,86 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
           </DrawerHeader>
           <Divider />
           <List>
-            {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-              <ListItemButton
-                key={text}
+            <ListItemButton
+              onClick={() => router.push("/")}
+              key="home"
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            ))}
+                <HomeRoundedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => router.push("/e-books")}
+              key="E-Books"
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <LibraryBooksRoundedIcon />
+              </ListItemIcon>
+              <ListItemText primary="E-Books" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => router.push("/books")}
+              key="Books"
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <MenuBookOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Books" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => router.push("/users")}
+              key="Manage Accounts"
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <ManageAccountsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Books" sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
           </List>
           <Divider />
           <List>
@@ -193,7 +268,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <Component {...pageProps} />;
+          <Component {...pageProps} />
         </Box>
       </Box>
     </SessionProvider>

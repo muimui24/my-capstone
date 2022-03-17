@@ -20,39 +20,10 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import SearchIcon from '@mui/icons-material/Search';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { book, m_books, FormData } from '../models/bookModel';
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-interface book {
-  books: {
-    id: number;
-    title: string;
-    author: string;
-    category: string;
-    code: string;
-  }[];
-}
-
-interface m_books {
-  m_books: {
-    id: number;
-    title: string;
-    author: string;
-    category: string;
-    code: string;
-  }[];
-}
-
-interface FormData {
-  title: string;
-  author: string;
-  category: string;
-  code: string;
-  id: number;
-}
+import * as bookController from '../controller/booksController';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -110,7 +81,6 @@ export default function CustomizedTables({ books }: book) {
       id: book.id,
     });
     handleClickOpen();
-    // updateBook(book.title, book);
   }
   const [form, setForm] = useState<FormData>({
     title: '',
@@ -119,65 +89,17 @@ export default function CustomizedTables({ books }: book) {
     code: '',
     id: 0,
   });
-  async function create(data: FormData) {
-    try {
-      console.log(data);
-      fetch('http://localhost:3000/api/create', {
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      }).then(() => {
-        if (data.id) {
-          handleClose();
-          setForm({ title: '', author: '', category: '', code: '', id: 0 });
-          refreshData();
-        } else handleClose();
-        setForm({ title: '', author: '', category: '', code: '', id: 0 });
-        refreshData();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async function deleteBook(id: number) {
-    try {
-      fetch('http://localhost:3000/api/book/' + id, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'DELETE',
-      }).then(() => {
-        refreshData();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async function updateBook(id: number, data: FormData) {
-    try {
-      fetch('http://localhost:3000/api/book/' + id, {
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-      }).then(() => {
-        refreshData();
-        handleClose();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+
   const handleSubmit = (data: FormData) => {
     try {
       if (data.id) {
-        updateBook(data.id, data);
+        bookController.updateBook(data.id, data);
       } else {
-        create(data);
+        bookController.create(data);
       }
+      handleClose();
+      setForm({ title: '', author: '', category: '', code: '', id: 0 });
+      refreshData();
     } catch (error) {
       console.log(error);
     }
@@ -203,6 +125,11 @@ export default function CustomizedTables({ books }: book) {
   if (session == undefined) {
     signIn();
   }
+
+  const deleteBook = (id: number) => {
+    bookController.deleteBook(id);
+    refreshData();
+  };
   return (
     <>
       <Dialog open={open}>
@@ -318,15 +245,7 @@ export default function CustomizedTables({ books }: book) {
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {
-  const books = await prisma.m_books.findMany({
-    select: {
-      id: true,
-      title: true,
-      author: true,
-      category: true,
-      code: true,
-    },
-  });
+  const books = await bookController.getAll();
 
   return {
     props: {

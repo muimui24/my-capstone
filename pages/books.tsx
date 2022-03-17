@@ -1,28 +1,28 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Button, Divider } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import { useRouter } from "next/router";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import SearchIcon from "@mui/icons-material/Search";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { useState } from "react";
-import { GetServerSideProps } from "next";
-import { PrismaClient } from "@prisma/client";
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { Button, Divider } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import { useRouter } from 'next/router';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import SearchIcon from '@mui/icons-material/Search';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -56,7 +56,7 @@ interface FormData {
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#2196f3",
+    backgroundColor: '#2196f3',
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -65,11 +65,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
+  '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  "&:last-child td, &:last-child th": {
+  '&:last-child td, &:last-child th': {
     border: 0,
   },
 }));
@@ -85,19 +85,19 @@ function createData(
 }
 
 const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
+  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
+  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
+  createData('Eclair', 262, 16.0, 24, 6.0),
+  createData('Cupcake', 305, 3.7, 67, 4.3),
+  createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
 export default function CustomizedTables({ books }: book) {
@@ -110,31 +110,31 @@ export default function CustomizedTables({ books }: book) {
       id: book.id,
     });
     handleClickOpen();
-    updateBook(book.title, book);
+    // updateBook(book.title, book);
   }
   const [form, setForm] = useState<FormData>({
-    title: "",
-    author: "",
-    category: "",
-    code: "",
+    title: '',
+    author: '',
+    category: '',
+    code: '',
     id: 0,
   });
   async function create(data: FormData) {
     try {
       console.log(data);
-      fetch("http://localhost:3000/api/create", {
+      fetch('http://localhost:3000/api/create', {
         body: JSON.stringify(data),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        method: "POST",
+        method: 'POST',
       }).then(() => {
         if (data.id) {
           handleClose();
-          setForm({ title: "", author: "", category: "", code: "", id: 0 });
+          setForm({ title: '', author: '', category: '', code: '', id: 0 });
           refreshData();
         } else handleClose();
-        setForm({ title: "", author: "", category: "", code: "", id: 0 });
+        setForm({ title: '', author: '', category: '', code: '', id: 0 });
         refreshData();
       });
     } catch (error) {
@@ -143,11 +143,11 @@ export default function CustomizedTables({ books }: book) {
   }
   async function deleteBook(id: number) {
     try {
-      fetch("http://localhost:3000/api/book/" + id, {
+      fetch('http://localhost:3000/api/book/' + id, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        method: "DELETE",
+        method: 'DELETE',
       }).then(() => {
         refreshData();
       });
@@ -157,12 +157,12 @@ export default function CustomizedTables({ books }: book) {
   }
   async function updateBook(id: number, data: FormData) {
     try {
-      fetch("http://localhost:3000/api/update/" + id, {
+      fetch('http://localhost:3000/api/book/' + id, {
         body: JSON.stringify(data),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        method: "UPDATE",
+        method: 'PUT',
       }).then(() => {
         refreshData();
         handleClose();
@@ -173,7 +173,6 @@ export default function CustomizedTables({ books }: book) {
   }
   const handleSubmit = (data: FormData) => {
     try {
-      console.log(JSON.stringify(data));
       if (data.id) {
         updateBook(data.id, data);
       } else {
@@ -198,7 +197,7 @@ export default function CustomizedTables({ books }: book) {
   const handleClose = () => {
     setOpen(false);
   };
-  if (status === "loading") {
+  if (status === 'loading') {
     return <h1>loading</h1>;
   }
   if (session == undefined) {
@@ -211,40 +210,40 @@ export default function CustomizedTables({ books }: book) {
         <DialogContent>
           <TextField
             autoFocus
-            margin="dense"
-            id="title"
-            label="Title"
-            type="text"
+            margin='dense'
+            id='title'
+            label='Title'
+            type='text'
             fullWidth
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
           <TextField
             autoFocus
-            margin="dense"
-            id="author"
-            label="Author"
-            type="text"
+            margin='dense'
+            id='author'
+            label='Author'
+            type='text'
             fullWidth
             value={form.author}
             onChange={(e) => setForm({ ...form, author: e.target.value })}
           />
           <TextField
             autoFocus
-            margin="dense"
-            id="category"
-            label="Category"
-            type="text"
+            margin='dense'
+            id='category'
+            label='Category'
+            type='text'
             fullWidth
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           />
           <TextField
             autoFocus
-            margin="dense"
-            id=""
-            label="Code"
-            type="text"
+            margin='dense'
+            id=''
+            label='Code'
+            type='text'
             fullWidth
             value={form.code}
             onChange={(e) => setForm({ ...form, code: e.target.value })}
@@ -254,8 +253,7 @@ export default function CustomizedTables({ books }: book) {
           <Button
             onClick={() => {
               {
-                // handleSubmit(form);
-                console.log(form);
+                handleSubmit(form);
               }
             }}
           >
@@ -266,51 +264,51 @@ export default function CustomizedTables({ books }: book) {
       </Dialog>
       <h2>LIBRARY BOOKS</h2>
       <Button
-        variant="outlined"
+        variant='outlined'
         startIcon={<AddCircleIcon />}
-        sx={{ m: "6px" }}
+        sx={{ m: '6px' }}
         onClick={handleClickOpen}
       >
         Add Book
       </Button>
-      <Button variant="outlined" startIcon={<SearchIcon />} sx={{ m: "6px" }}>
+      <Button variant='outlined' startIcon={<SearchIcon />} sx={{ m: '6px' }}>
         Search BOOK
       </Button>
       <Divider />
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Table sx={{ minWidth: 700 }} aria-label='customized table'>
           <TableHead>
             <TableRow>
               <StyledTableCell>Action</StyledTableCell>
               <StyledTableCell>Book Title</StyledTableCell>
-              <StyledTableCell align="right">Author</StyledTableCell>
-              <StyledTableCell align="right">BookCode</StyledTableCell>
-              <StyledTableCell align="right">Category</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right">id</StyledTableCell>
+              <StyledTableCell align='right'>Author</StyledTableCell>
+              <StyledTableCell align='right'>BookCode</StyledTableCell>
+              <StyledTableCell align='right'>Category</StyledTableCell>
+              <StyledTableCell align='right'></StyledTableCell>
+              <StyledTableCell align='right'>id</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {books.map((books) => (
               <StyledTableRow key={books.id}>
-                <StyledTableCell component="th" scope="row">
+                <StyledTableCell component='th' scope='row'>
                   <Button onClick={() => onEdit(books)}>
                     <EditIcon />
                   </Button>
                   <Button onClick={() => deleteBook(books.id)}>
-                    <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
+                    <DeleteIcon type='button' sx={{ color: '#ef5350' }} />
                   </Button>
                 </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
+                <StyledTableCell component='th' scope='row'>
                   {books.title}
                 </StyledTableCell>
-                <StyledTableCell align="right">{books.author}</StyledTableCell>
-                <StyledTableCell align="right">{books.code}</StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell align='right'>{books.author}</StyledTableCell>
+                <StyledTableCell align='right'>{books.code}</StyledTableCell>
+                <StyledTableCell align='right'>
                   {books.category}
                 </StyledTableCell>
-                <StyledTableCell align="right">hackdog</StyledTableCell>
-                <StyledTableCell align="right">{books.id}</StyledTableCell>
+                <StyledTableCell align='right'>hackdog</StyledTableCell>
+                <StyledTableCell align='right'>{books.id}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

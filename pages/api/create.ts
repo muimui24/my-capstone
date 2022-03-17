@@ -1,5 +1,5 @@
-import { prisma } from "../../lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from '../../lib/prisma';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,8 +16,8 @@ export default async function handler(
         code,
       },
     });
-    res.status(200).json({ message: "Book Added" });
+    res.status(200).json({ message: 'Book Added' });
   } catch (error) {
-    console.log("Failure");
+    console.log('Failure');
   }
 }

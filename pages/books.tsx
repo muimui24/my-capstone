@@ -101,6 +101,17 @@ const rows = [
 ];
 
 export default function CustomizedTables({ books }: book) {
+  function onEdit(book: any) {
+    setForm({
+      title: book.title,
+      author: book.author,
+      category: book.category,
+      code: book.code,
+      id: book.id,
+    });
+    handleClickOpen();
+    updateBook(book.title, book);
+  }
   const [form, setForm] = useState<FormData>({
     title: "",
     author: "",
@@ -118,6 +129,11 @@ export default function CustomizedTables({ books }: book) {
         },
         method: "POST",
       }).then(() => {
+        if (data.id) {
+          handleClose();
+          setForm({ title: "", author: "", category: "", code: "", id: 0 });
+          refreshData();
+        } else handleClose();
         setForm({ title: "", author: "", category: "", code: "", id: 0 });
         refreshData();
       });
@@ -127,7 +143,7 @@ export default function CustomizedTables({ books }: book) {
   }
   async function deleteBook(id: number) {
     try {
-      fetch("http://localhost:3000/api/book/${id}", {
+      fetch("http://localhost:3000/api/book/" + id, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -139,9 +155,30 @@ export default function CustomizedTables({ books }: book) {
       console.log(error);
     }
   }
+  async function updateBook(id: number, data: FormData) {
+    try {
+      fetch("http://localhost:3000/api/update/" + id, {
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "UPDATE",
+      }).then(() => {
+        refreshData();
+        handleClose();
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
   const handleSubmit = (data: FormData) => {
     try {
-      create(data);
+      console.log(JSON.stringify(data));
+      if (data.id) {
+        updateBook(data.id, data);
+      } else {
+        create(data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -217,7 +254,8 @@ export default function CustomizedTables({ books }: book) {
           <Button
             onClick={() => {
               {
-                handleSubmit(form);
+                // handleSubmit(form);
+                console.log(form);
               }
             }}
           >
@@ -256,7 +294,9 @@ export default function CustomizedTables({ books }: book) {
             {books.map((books) => (
               <StyledTableRow key={books.id}>
                 <StyledTableCell component="th" scope="row">
-                  <EditIcon />
+                  <Button onClick={() => onEdit(books)}>
+                    <EditIcon />
+                  </Button>
                   <Button onClick={() => deleteBook(books.id)}>
                     <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                   </Button>

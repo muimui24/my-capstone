@@ -55,7 +55,6 @@ model m_ebooks {
   rating           Int?
    isActive         Boolean?
     category             String
-  createdby        String             @db.VarChar(255)
   creationDate     DateTime?          @db.DateTime(0)
   modifiedBy       String?            @db.VarChar(255)
   modificationDate DateTime?          @db.DateTime(0)

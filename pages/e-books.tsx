@@ -20,37 +20,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import SearchIcon from "@mui/icons-material/Search";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { ebook, FormData } from "../models/ebookModel";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
-
-interface book {
-  books: {
-    id: number;
-    title: string;
-    author: string;
-    category: string;
-  }[];
-}
-
-interface m_books {
-  m_ebooks: {
-    id: number;
-    title: string;
-    author: string;
-    category: string;
-  }[];
-}
-
-interface FormData {
-  title: string;
-  author: string;
-  category: string;
-
-  id: number;
-}
+import * as ebookController from "../controller/ebooksController";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -72,7 +45,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function CustomizedTables({ books }: book) {
+export default function CustomizedTables({ ebooks }: ebook) {
+  function onEdit(book: any) {
+    setForm({
+      title: book.title,
+      author: book.author,
+      category: book.category,
+      id: book.id,
+    });
+    handleClickOpen();
+  }
   const [form, setForm] = useState<FormData>({
     title: "",
     author: "",
@@ -80,40 +62,17 @@ export default function CustomizedTables({ books }: book) {
 
     id: 0,
   });
-  async function create(data: FormData) {
-    try {
-      console.log(data);
-      fetch("http://localhost:3000/api/add-e-book", {
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-      }).then(() => {
-        setForm({ title: "", author: "", category: "", id: 0 });
-        refreshData();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  async function deleteBook(id: number) {
-    try {
-      fetch("http://localhost:3000/api/book/${id}", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "DELETE",
-      }).then(() => {
-        refreshData();
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
+
   const handleSubmit = (data: FormData) => {
     try {
-      create(data);
+      if (data.id) {
+        ebookController.updateBook(data.id, data);
+      } else {
+        ebookController.create(data);
+      }
+      handleClose();
+      setForm({ title: "", author: "", category: "", id: 0 });
+      refreshData();
     } catch (error) {
       console.log(error);
     }
@@ -139,10 +98,15 @@ export default function CustomizedTables({ books }: book) {
   if (session == undefined) {
     signIn();
   }
+
+  const deleteBook = (id: number) => {
+    ebookController.deleteBook(id);
+    refreshData();
+  };
   return (
     <>
       <Dialog open={open}>
-        <DialogTitle>Add Book</DialogTitle>
+        <DialogTitle>Book Details</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -183,12 +147,12 @@ export default function CustomizedTables({ books }: book) {
               }
             }}
           >
-            Add
+            Submit
           </Button>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
-      <h2>LIBRARY BOOKS</h2>
+      <h2>E-BOOKS</h2>
       <Button
         variant="outlined"
         startIcon={<AddCircleIcon />}
@@ -215,10 +179,12 @@ export default function CustomizedTables({ books }: book) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map((books) => (
+            {ebooks.map((books) => (
               <StyledTableRow key={books.id}>
                 <StyledTableCell component="th" scope="row">
-                  <EditIcon />
+                  <Button onClick={() => onEdit(books)}>
+                    <EditIcon />
+                  </Button>
                   <Button onClick={() => deleteBook(books.id)}>
                     <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                   </Button>
@@ -242,17 +208,11 @@ export default function CustomizedTables({ books }: book) {
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {
-  const books = await prisma.m_ebooks.findMany({
-    select: {
-      title: true,
-      author: true,
-      category: true,
-    },
-  });
+  const ebooks = await ebookController.getAll();
 
   return {
     props: {
-      books,
+      ebooks,
     },
   };
 };

@@ -1,10 +1,9 @@
-export interface book {
-  books: {
+export interface ebook {
+  ebooks: {
     id: number;
     title: string;
     author: string;
     category: string;
-    code: string;
   }[];
 }
 
@@ -12,6 +11,5 @@ export interface FormData {
   title: string;
   author: string;
   category: string;
-  code: string;
   id: number;
 }

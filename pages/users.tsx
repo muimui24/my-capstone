@@ -19,6 +19,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import SearchIcon from "@mui/icons-material/Search";
+import { signIn, signOut, useSession } from "next-auth/react";
+import { user, FormData } from "../models/userModel";
+import { useState } from "react";
+import { GetServerSideProps } from "next";
+import * as userController from "../controller/usersController";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -40,25 +45,61 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: string,
-  fat: string,
-  carbs: string,
-  protein: string
-) {
-  return { name, calories, fat, carbs, protein };
-}
+export default function CustomizedTables({ users }: user) {
+  function onEdit(user: any) {
+    setForm({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      middleName: user.middleName,
+      contactNumber: user.contactNumber,
+      role: user.role,
+      userName: user.userName,
+      password: user.password,
+    });
+    handleClickOpen();
+  }
+  const [form, setForm] = useState<FormData>({
+    id: 0,
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    contactNumber: "",
+    role: "",
+    userName: "",
+    password: "",
+  });
 
-const rows = [
-  createData("12313213", "Dela Cruz", "Juan", "P", "093232332"),
-  createData("12313213", "Dela Cruz", "Juan", "P", "093232332"),
-  createData("12313213", "Dela Cruz", "Juan", "P", "093232332"),
-];
-
-export default function CustomizedTables() {
+  const handleSubmit = (data: FormData) => {
+    try {
+      if (data.id) {
+        userController.updateBook(data.id, data);
+      } else {
+        userController.create(data);
+      }
+      handleClose();
+      setForm({
+        id: 0,
+        firstName: "",
+        lastName: "",
+        middleName: "",
+        contactNumber: "",
+        role: "",
+        userName: "",
+        password: "",
+      });
+      refreshData();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
+  const { data: session, status } = useSession();
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,61 +108,119 @@ export default function CustomizedTables() {
   const handleClose = () => {
     setOpen(false);
   };
+  if (status === "loading") {
+    return <h1>loading</h1>;
+  }
+  if (session == undefined) {
+    signIn();
+  }
 
+  const deleteBook = (id: number) => {
+    userController.deleteBook(id);
+    refreshData();
+  };
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Add Book</DialogTitle>
+      <Dialog open={open}>
+        <DialogTitle>Users Management</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Title"
+            id="fname"
+            label="First Name"
             type="text"
             fullWidth
-            variant="standard"
+            value={form.firstName}
+            onChange={(e) => setForm({ ...form, firstName: e.target.value })}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Author"
-            type="type"
+            id="mname"
+            label="Middle Name"
+            type="text"
             fullWidth
-            variant="standard"
+            value={form.middleName}
+            onChange={(e) => setForm({ ...form, middleName: e.target.value })}
           />
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Code"
-            type="type"
+            id="lname"
+            label="Last Name"
+            type="text"
             fullWidth
-            variant="standard"
+            value={form.lastName}
+            onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="pnumber"
+            label="Phone Number"
+            type="text"
+            fullWidth
+            value={form.contactNumber}
+            onChange={(e) =>
+              setForm({ ...form, contactNumber: e.target.value })
+            }
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="role"
+            label="Role"
+            type="text"
+            fullWidth
+            value={form.role}
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="uname"
+            label="User Name"
+            type="text"
+            fullWidth
+            value={form.userName}
+            onChange={(e) => setForm({ ...form, userName: e.target.value })}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            id="password"
+            label="Password"
+            type="password"
+            fullWidth
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
+          <Button
+            onClick={() => {
+              {
+                handleSubmit(form);
+              }
+            }}
+          >
+            SUBMIT
+          </Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
-      <h2>Manage Users</h2>
+      <h2>E-BOOKS</h2>
       <Button
         variant="outlined"
         startIcon={<AddCircleIcon />}
         sx={{ m: "6px" }}
         onClick={handleClickOpen}
       >
-        Add Student User
-      </Button>{" "}
-      <Button
-        variant="outlined"
-        startIcon={<AddCircleIcon />}
-        sx={{ m: "6px" }}
-        onClick={handleClickOpen}
-      >
-        Add Teacher User
+        ADD BOOK
+      </Button>
+      <Button variant="outlined" startIcon={<SearchIcon />} sx={{ m: "6px" }}>
+        Search BOOK
       </Button>
       <Divider />
       <TableContainer component={Paper}>
@@ -130,28 +229,39 @@ export default function CustomizedTables() {
             <TableRow>
               <StyledTableCell>Action</StyledTableCell>
               <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell align="right">Last Name</StyledTableCell>
               <StyledTableCell align="right">First Name</StyledTableCell>
-              <StyledTableCell align="right">Middle Initial</StyledTableCell>
-              <StyledTableCell align="right">Phone Number</StyledTableCell>
+              <StyledTableCell align="right">Middle Name</StyledTableCell>
+
+              <StyledTableCell align="right">Last Name</StyledTableCell>
+              <StyledTableCell align="right">Cellphone Number</StyledTableCell>
               <StyledTableCell align="right">Role</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
+            {users.map((user) => (
+              <StyledTableRow key={user.id}>
                 <StyledTableCell component="th" scope="row">
-                  <EditIcon />
-                  <DeleteIcon sx={{ color: "#ef5350" }} />
+                  <Button onClick={() => onEdit(user)}>
+                    <EditIcon />
+                  </Button>
+                  <Button onClick={() => deleteBook(user.id)}>
+                    <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
+                  </Button>
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  {user.id}
                 </StyledTableCell>
-                <StyledTableCell align="right">{row.calories}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">09</StyledTableCell>
-                <StyledTableCell align="right">User</StyledTableCell>
+                <StyledTableCell align="right">
+                  {user.firstName}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {user.middleName}
+                </StyledTableCell>
+                <StyledTableCell align="right">{user.lastName}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {user.contactNumber}
+                </StyledTableCell>
+                <StyledTableCell align="right">{user.role}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
@@ -160,3 +270,12 @@ export default function CustomizedTables() {
     </>
   );
 }
+export const getServerSideProps: GetServerSideProps = async () => {
+  const users = await userController.getAll();
+
+  return {
+    props: {
+      users,
+    },
+  };
+};

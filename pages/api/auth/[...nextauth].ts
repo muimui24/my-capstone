@@ -18,13 +18,13 @@ export default NextAuth({
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        username: { label: "Username", type: "text", placeholder: "Username" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = await prisma.testuser.findFirst({
+        const user = await prisma.a_user.findFirst({
           where: {
-            username: credentials?.username,
+            userName: credentials?.username,
             password: credentials?.password,
           },
         });

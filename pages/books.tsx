@@ -126,7 +126,7 @@ export default function CustomizedTables({ books }: book) {
     signIn();
   }
   if (session?.user?.name !== "admin") {
-    return <>Restricted </>;
+    return router.push("/");
   }
 
   const deleteBook = (id: number) => {
@@ -149,7 +149,6 @@ export default function CustomizedTables({ books }: book) {
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="author"
             label="Author"
@@ -159,7 +158,6 @@ export default function CustomizedTables({ books }: book) {
             onChange={(e) => setForm({ ...form, author: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="category"
             label="Category"
@@ -169,7 +167,6 @@ export default function CustomizedTables({ books }: book) {
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id=""
             label="Code"

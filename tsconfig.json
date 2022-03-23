@@ -15,6 +15,12 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "lib/hello-cdk-stack.js",
+    "lib/hello-cdk-stack.js"
+  ],
   "exclude": ["node_modules"]
 }

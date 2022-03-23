@@ -24,6 +24,8 @@ import { ebook, FormData } from "../models/ebookModel";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
 import * as ebookController from "../controller/ebooksController";
+import { redirect } from "next/dist/server/api-utils";
+import path from "path";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -99,7 +101,7 @@ export default function CustomizedTables({ ebooks }: ebook) {
     signIn();
   }
   if (session?.user?.name !== "admin") {
-    signIn();
+    return router.push("/");
   }
 
   const deleteBook = (id: number) => {
@@ -122,7 +124,6 @@ export default function CustomizedTables({ ebooks }: ebook) {
             onChange={(e) => setForm({ ...form, title: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="author"
             label="Author"
@@ -132,7 +133,6 @@ export default function CustomizedTables({ ebooks }: ebook) {
             onChange={(e) => setForm({ ...form, author: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="category"
             label="Category"

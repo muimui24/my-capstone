@@ -177,7 +177,7 @@ export default function MenuList(open: any) {
           >
             <LibraryBooksRoundedIcon />
           </ListItemIcon>
-          <ListItemText primary="Books" sx={{ opacity: open ? 1 : 0 }} />
+          <ListItemText primary="E-Books" sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
       </List>
     );

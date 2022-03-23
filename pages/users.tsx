@@ -120,7 +120,7 @@ export default function CustomizedTables({ users }: user) {
     refreshData();
   };
   if (session?.user?.name !== "admin") {
-    signIn();
+    return router.push("/");
   }
   return (
     <>
@@ -138,7 +138,6 @@ export default function CustomizedTables({ users }: user) {
             onChange={(e) => setForm({ ...form, firstName: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="mname"
             label="Middle Name"
@@ -148,7 +147,6 @@ export default function CustomizedTables({ users }: user) {
             onChange={(e) => setForm({ ...form, middleName: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="lname"
             label="Last Name"
@@ -158,7 +156,6 @@ export default function CustomizedTables({ users }: user) {
             onChange={(e) => setForm({ ...form, lastName: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="pnumber"
             label="Phone Number"
@@ -170,7 +167,6 @@ export default function CustomizedTables({ users }: user) {
             }
           />
           <TextField
-            autoFocus
             margin="dense"
             id="role"
             label="Role"
@@ -180,7 +176,6 @@ export default function CustomizedTables({ users }: user) {
             onChange={(e) => setForm({ ...form, role: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="uname"
             label="User Name"
@@ -190,7 +185,6 @@ export default function CustomizedTables({ users }: user) {
             onChange={(e) => setForm({ ...form, userName: e.target.value })}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="password"
             label="Password"

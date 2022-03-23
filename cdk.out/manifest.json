@@ -1,0 +1,75 @@
+{
+  "version": "16.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "HelloCdkStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "HelloCdkStack.template.json",
+        "validateOnSynth": false
+      },
+      "metadata": {
+        "/HelloCdkStack/MyFirstBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyFirstBucketB8884501",
+            "trace": [
+              "new Bucket (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/aws-s3/lib/bucket.js:587:26)",
+              "new HelloCdkStack (/Users/johnlesterasprec/my-capstone/lib/hello-cdk-stack.js:8:5)",
+              "Object.<anonymous> (/Users/johnlesterasprec/my-capstone/bin/hello-cdk.js:5:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1099:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)",
+              "Module.load (node:internal/modules/cjs/loader:975:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:822:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:77:12)",
+              "node:internal/main/run_main_module:17:47"
+            ]
+          }
+        ],
+        "/HelloCdkStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata",
+            "trace": [
+              "new MetadataResource (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/metadata-resource.js:22:30)",
+              "/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:139:9",
+              "visit (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:200:9)",
+              "visit (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:197:9)",
+              "injectMetadataResources (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:128:5)",
+              "Object.synthesize (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:17:5)",
+              "App.synth (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/stage.js:89:41)",
+              "process.<anonymous> (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/app.js:51:51)",
+              "Object.onceWrapper (node:events:642:26)",
+              "process.emit (node:events:527:28)"
+            ]
+          }
+        ],
+        "/HelloCdkStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable",
+            "trace": [
+              "new MetadataResource (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/metadata-resource.js:30:35)",
+              "/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:139:9",
+              "visit (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:200:9)",
+              "visit (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:197:9)",
+              "injectMetadataResources (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:128:5)",
+              "Object.synthesize (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/private/synthesis.js:17:5)",
+              "App.synth (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/stage.js:89:41)",
+              "process.<anonymous> (/Users/johnlesterasprec/my-capstone/node_modules/@aws-cdk/core/lib/app.js:51:51)",
+              "Object.onceWrapper (node:events:642:26)",
+              "process.emit (node:events:527:28)"
+            ]
+          }
+        ]
+      },
+      "displayName": "HelloCdkStack"
+    }
+  }
+}

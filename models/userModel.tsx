@@ -1,6 +1,6 @@
 export interface user {
   users: {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
     middleName: string;
@@ -12,7 +12,7 @@ export interface user {
 }
 
 export interface FormData {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   middleName: string;

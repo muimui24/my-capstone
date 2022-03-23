@@ -8,11 +8,42 @@ datasource db {
 }
 
 
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
 
-model a_user {
-  id               Int                @id @default(autoincrement())
-  isActive         Boolean?
-  createdby        String             @db.VarChar(255)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name         String?
+  role           String             @db.VarChar(255)
+  email         String?   @unique
+  
+  image         String?
+ 
+  isActive         Boolean? 
   creationDate     DateTime?          @db.DateTime(0)
   modifiedBy       String?            @db.VarChar(255)
   modificationDate DateTime?          @db.DateTime(0)
@@ -22,12 +53,50 @@ model a_user {
  
   contactNumber    String             @db.VarChar(255)
 
-  role             String             @db.VarChar(255)
+  userName        String
   password         String             @db.VarChar(255)
   
-  email            String             @unique(map: "email") @db.VarChar(255)
-  t_borrowingbooks t_borrowingbooks[]
+ accounts      Account[]
+  sessions      Session[]
 }
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+
+
+
+
+
+
+
+
+
+// model a_user {
+//   id               Int                @id @default(autoincrement())
+//   isActive         Boolean?
+//   createdby        String             @db.VarChar(255)
+//   creationDate     DateTime?          @db.DateTime(0)
+//   modifiedBy       String?            @db.VarChar(255)
+//   modificationDate DateTime?          @db.DateTime(0)
+//   firstName        String             @db.VarChar(255)
+//   lastName         String             @db.VarChar(255)
+//   middleName       String             @db.VarChar(255)
+ 
+//   contactNumber    String             @db.VarChar(255)
+
+//   role             String             @db.VarChar(255)
+//   password         String             @db.VarChar(255)
+  
+//   email            String             @unique(map: "email") @db.VarChar(255)
+//   t_borrowingbooks t_borrowingbooks[]
+// }
+
 
 model m_books {
   id                Int              @id @default(autoincrement())
@@ -119,7 +188,7 @@ model t_borrowingbooks {
   note               String?          @db.VarChar(255)
   m_booksInventory   m_booksInventory @relation(fields: [bookCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "borrowingbookinventory")
   m_books            m_books          @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingbookrel")
-  a_user             a_user           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingUser")
+  // a_user             a_user           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingUser")
 
   @@index([userId], map: "borrowingUser")
   @@index([bookCode], map: "borrowingbookinventory")

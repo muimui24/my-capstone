@@ -28,6 +28,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useRouter } from "next/router";
 import { red } from "@mui/material/colors";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import SideNav from "../layout/AppBar";
+import AccountMenu from "../layout/account";
+import MenuList from "../layout/sidebar";
 
 const drawerWidth = 240;
 
@@ -135,13 +138,20 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
             >
               <MenuIcon />
             </IconButton>
+            <div style={{ width: "100%" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h6" noWrap component="div" m="10px">
+                  ONLINE LIBRARY
+                </Typography>
 
-            <Typography variant="h6" noWrap component="div" m="10px">
-              ONLINE LIBRARY
-            </Typography>
-            <button type="button" onClick={() => signOut()}>
-              Sign Out
-            </button>
+                <AccountMenu />
+              </Box>
+            </div>
           </Toolbar>{" "}
         </AppBar>
         <Drawer
@@ -159,88 +169,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
             </IconButton>
           </DrawerHeader>
           <Divider />
-          <List>
-            <ListItemButton
-              onClick={() => router.push("/")}
-              key="home"
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <HomeRoundedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => router.push("/e-books")}
-              key="E-Books"
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <LibraryBooksRoundedIcon />
-              </ListItemIcon>
-              <ListItemText primary="E-Books" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => router.push("/books")}
-              key="Books"
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <MenuBookOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Books" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-            <ListItemButton
-              onClick={() => router.push("/users")}
-              key="Manage Accounts"
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <ManageAccountsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Books" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          </List>
+          <MenuList open={open} />
           <Divider />
           <List>
             {["All mail", "Trash", "Spam"].map((text, index) => (
@@ -266,6 +195,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
             ))}
           </List>
         </Drawer>
+
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
           <Component {...pageProps} />

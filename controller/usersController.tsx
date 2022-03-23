@@ -18,7 +18,7 @@ export async function create(data: FormData) {
     console.log(error);
   }
 }
-export async function deleteBook(id: number) {
+export async function deleteBook(id: string) {
   try {
     fetch("http://localhost:3000/api/users/" + id, {
       headers: {
@@ -32,7 +32,7 @@ export async function deleteBook(id: number) {
     console.log(error);
   }
 }
-export async function updateBook(id: number, data: FormData) {
+export async function updateBook(id: string, data: FormData) {
   try {
     fetch("http://localhost:3000/api/users/" + id, {
       body: JSON.stringify(data),

@@ -60,7 +60,7 @@ export default function CustomizedTables({ users }: user) {
     handleClickOpen();
   }
   const [form, setForm] = useState<FormData>({
-    id: 0,
+    id: "",
     firstName: "",
     lastName: "",
     middleName: "",
@@ -79,7 +79,7 @@ export default function CustomizedTables({ users }: user) {
       }
       handleClose();
       setForm({
-        id: 0,
+        id: "",
         firstName: "",
         lastName: "",
         middleName: "",
@@ -115,14 +115,17 @@ export default function CustomizedTables({ users }: user) {
     signIn();
   }
 
-  const deleteBook = (id: number) => {
+  const deleteBook = (id: string) => {
     userController.deleteBook(id);
     refreshData();
   };
+  if (session?.user?.name !== "admin") {
+    signIn();
+  }
   return (
     <>
       <Dialog open={open}>
-        <DialogTitle>Users Management</DialogTitle>
+        <DialogTitle>User Info</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -210,17 +213,17 @@ export default function CustomizedTables({ users }: user) {
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
-      <h2>E-BOOKS</h2>
+      <h2>MANAGE USERS</h2>
       <Button
         variant="outlined"
         startIcon={<AddCircleIcon />}
         sx={{ m: "6px" }}
         onClick={handleClickOpen}
       >
-        ADD BOOK
+        ADD USER
       </Button>
       <Button variant="outlined" startIcon={<SearchIcon />} sx={{ m: "6px" }}>
-        Search BOOK
+        Search USER
       </Button>
       <Divider />
       <TableContainer component={Paper}>

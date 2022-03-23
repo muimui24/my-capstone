@@ -5,16 +5,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const userId = req.query.id;
+  const userId = String(req.query.id);
 
   if (req.method === "DELETE") {
-    const users = await prisma.a_user.delete({
-      where: { id: Number(userId) },
+    const users = await prisma.user.delete({
+      where: { id: userId },
     });
     res.json(users);
   } else if (req.method === "PUT") {
     try {
-      const userId = req.query.id;
       const {
         firstName,
         lastName,
@@ -24,8 +23,8 @@ export default async function handler(
         userName,
         password,
       } = req.body;
-      const users = await prisma.a_user.update({
-        where: { id: Number(userId) },
+      const users = await prisma.user.update({
+        where: { id: userId },
         data: {
           firstName,
           lastName,

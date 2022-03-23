@@ -125,9 +125,6 @@ export default function CustomizedTables({ books }: book) {
   if (session == undefined) {
     signIn();
   }
-  if (session?.user?.name !== "admin") {
-    return <>Restricted </>;
-  }
 
   const deleteBook = (id: number) => {
     bookController.deleteBook(id);
@@ -135,75 +132,8 @@ export default function CustomizedTables({ books }: book) {
   };
   return (
     <>
-      <Dialog open={open}>
-        <DialogTitle>Book Details</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="title"
-            label="Title"
-            type="text"
-            fullWidth
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="author"
-            label="Author"
-            type="text"
-            fullWidth
-            value={form.author}
-            onChange={(e) => setForm({ ...form, author: e.target.value })}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="category"
-            label="Category"
-            type="text"
-            fullWidth
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id=""
-            label="Code"
-            type="text"
-            fullWidth
-            value={form.code}
-            onChange={(e) => setForm({ ...form, code: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              {
-                handleSubmit(form);
-              }
-            }}
-          >
-            Submit
-          </Button>
-          <Button onClick={handleClose}>Close</Button>
-        </DialogActions>
-      </Dialog>
       <h2>LIBRARY BOOKS</h2>
-      <Button
-        variant="outlined"
-        startIcon={<AddCircleIcon />}
-        sx={{ m: "6px" }}
-        onClick={handleClickOpen}
-      >
-        Add Book
-      </Button>
-      <Button variant="outlined" startIcon={<SearchIcon />} sx={{ m: "6px" }}>
-        Search BOOK
-      </Button>
+
       <Divider />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -219,14 +149,10 @@ export default function CustomizedTables({ books }: book) {
           <TableBody>
             {books.map((books) => (
               <StyledTableRow key={books.id}>
-                <StyledTableCell component="th" scope="row">
-                  <Button onClick={() => onEdit(books)}>
-                    <EditIcon />
-                  </Button>
-                  <Button onClick={() => deleteBook(books.id)}>
-                    <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
-                  </Button>
+                <StyledTableCell align="left">
+                  <Button>Request Borrow</Button>
                 </StyledTableCell>
+
                 <StyledTableCell component="th" scope="row">
                   {books.title}
                 </StyledTableCell>

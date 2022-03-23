@@ -22,13 +22,13 @@ export default NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = await prisma.a_user.findFirst({
+        const user = await prisma.user.findFirst({
           where: {
             userName: credentials?.username,
             password: credentials?.password,
           },
         });
-
+        console.log();
         if (user !== null) {
           return user;
         } else {
@@ -39,6 +39,7 @@ export default NextAuth({
       },
     }),
   ],
+
   secret: process.env.SECRET,
   session: {
     // Choose how you want to save the user session.

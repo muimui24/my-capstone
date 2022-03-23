@@ -16,7 +16,7 @@ export default async function handler(
         userName,
         password,
       } = req.body;
-      await prisma.a_user.create({
+      await prisma.user.create({
         data: {
           firstName,
           lastName,
@@ -29,7 +29,7 @@ export default async function handler(
       });
       res.status(200).json({ message: "User Added" });
     } else if (req.method === "GET") {
-      const users = await prisma.a_user.findMany({
+      const users = await prisma.user.findMany({
         select: {
           id: true,
           firstName: true,

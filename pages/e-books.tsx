@@ -98,6 +98,9 @@ export default function CustomizedTables({ ebooks }: ebook) {
   if (session == undefined) {
     signIn();
   }
+  if (session?.user?.name !== "admin") {
+    signIn();
+  }
 
   const deleteBook = (id: number) => {
     ebookController.deleteBook(id);
@@ -174,8 +177,6 @@ export default function CustomizedTables({ ebooks }: ebook) {
               <StyledTableCell align="right">Author</StyledTableCell>
 
               <StyledTableCell align="right">Category</StyledTableCell>
-              <StyledTableCell align="right"></StyledTableCell>
-              <StyledTableCell align="right">id</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -197,8 +198,6 @@ export default function CustomizedTables({ ebooks }: ebook) {
                 <StyledTableCell align="right">
                   {books.category}
                 </StyledTableCell>
-                <StyledTableCell align="right">hackdog</StyledTableCell>
-                <StyledTableCell align="right">{books.id}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

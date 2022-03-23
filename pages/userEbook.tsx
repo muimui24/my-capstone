@@ -20,10 +20,11 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import SearchIcon from "@mui/icons-material/Search";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { book, FormData } from "../models/bookModel";
+import { ebook, FormData } from "../models/ebookModel";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
-import * as bookController from "../controller/booksController";
+import * as ebookController from "../controller/ebooksController";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,39 +46,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
-export default function CustomizedTables({ books }: book) {
+export default function CustomizedTables({ ebooks }: ebook) {
   function onEdit(book: any) {
     setForm({
       title: book.title,
       author: book.author,
       category: book.category,
-      code: book.code,
       id: book.id,
     });
     handleClickOpen();
@@ -86,19 +60,19 @@ export default function CustomizedTables({ books }: book) {
     title: "",
     author: "",
     category: "",
-    code: "",
+
     id: 0,
   });
 
   const handleSubmit = (data: FormData) => {
     try {
       if (data.id) {
-        bookController.updateBook(data.id, data);
+        ebookController.updateBook(data.id, data);
       } else {
-        bookController.create(data);
+        ebookController.create(data);
       }
       handleClose();
-      setForm({ title: "", author: "", category: "", code: "", id: 0 });
+      setForm({ title: "", author: "", category: "", id: 0 });
       refreshData();
     } catch (error) {
       console.log(error);
@@ -125,86 +99,14 @@ export default function CustomizedTables({ books }: book) {
   if (session == undefined) {
     signIn();
   }
-  if (session?.user?.name !== "admin") {
-    return <>Restricted </>;
-  }
 
   const deleteBook = (id: number) => {
-    bookController.deleteBook(id);
+    ebookController.deleteBook(id);
     refreshData();
   };
   return (
     <>
-      <Dialog open={open}>
-        <DialogTitle>Book Details</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="title"
-            label="Title"
-            type="text"
-            fullWidth
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="author"
-            label="Author"
-            type="text"
-            fullWidth
-            value={form.author}
-            onChange={(e) => setForm({ ...form, author: e.target.value })}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="category"
-            label="Category"
-            type="text"
-            fullWidth
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id=""
-            label="Code"
-            type="text"
-            fullWidth
-            value={form.code}
-            onChange={(e) => setForm({ ...form, code: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              {
-                handleSubmit(form);
-              }
-            }}
-          >
-            Submit
-          </Button>
-          <Button onClick={handleClose}>Close</Button>
-        </DialogActions>
-      </Dialog>
-      <h2>LIBRARY BOOKS</h2>
-      <Button
-        variant="outlined"
-        startIcon={<AddCircleIcon />}
-        sx={{ m: "6px" }}
-        onClick={handleClickOpen}
-      >
-        Add Book
-      </Button>
-      <Button variant="outlined" startIcon={<SearchIcon />} sx={{ m: "6px" }}>
-        Search BOOK
-      </Button>
-      <Divider />
+      <h2>E-BOOKS</h2>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
@@ -212,26 +114,23 @@ export default function CustomizedTables({ books }: book) {
               <StyledTableCell>Action</StyledTableCell>
               <StyledTableCell>Book Title</StyledTableCell>
               <StyledTableCell align="right">Author</StyledTableCell>
-              <StyledTableCell align="right">BookCode</StyledTableCell>
+
               <StyledTableCell align="right">Category</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map((books) => (
+            {ebooks.map((books) => (
               <StyledTableRow key={books.id}>
                 <StyledTableCell component="th" scope="row">
-                  <Button onClick={() => onEdit(books)}>
-                    <EditIcon />
-                  </Button>
-                  <Button onClick={() => deleteBook(books.id)}>
-                    <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
+                  <Button>
+                    <DownloadForOfflineIcon />{" "}
                   </Button>
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {books.title}
                 </StyledTableCell>
                 <StyledTableCell align="right">{books.author}</StyledTableCell>
-                <StyledTableCell align="right">{books.code}</StyledTableCell>
+
                 <StyledTableCell align="right">
                   {books.category}
                 </StyledTableCell>
@@ -244,11 +143,11 @@ export default function CustomizedTables({ books }: book) {
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {
-  const books = await bookController.getAll();
+  const ebooks = await ebookController.getAll();
 
   return {
     props: {
-      books,
+      ebooks,
     },
   };
 };

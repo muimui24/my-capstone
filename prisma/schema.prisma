@@ -7,22 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -36,28 +34,23 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name         String?
-  role           String             @db.VarChar(255)
-  email         String?   @unique
-  
-  image         String?
- 
-  isActive         Boolean? 
-  creationDate     DateTime?          @default(now())
-  modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @default(now())
-  firstName        String             @db.VarChar(255)
-  lastName         String             @db.VarChar(255)
-  middleName       String             @db.VarChar(255)
- 
-  contactNumber    String             @db.VarChar(255)
-
-  userName        String
-  password         String             @db.VarChar(255)
-  
- accounts      Account[]
-  sessions      Session[]
+  id               String    @id @default(cuid())
+  name             String?
+  role             String    @db.VarChar(255)
+  email            String?   @unique
+  image            String?
+  isActive         Boolean?
+  creationDate     DateTime? @default(now())
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @default(now())
+  firstName        String    @db.VarChar(255)
+  lastName         String    @db.VarChar(255)
+  middleName       String    @db.VarChar(255)
+  contactNumber    String    @db.VarChar(255)
+  userName         String
+  password         String    @db.VarChar(255)
+  accounts         Account[]
+  sessions         Session[]
 }
 
 model VerificationToken {
@@ -68,124 +61,85 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
-
-
-
-
-
-
-
-
-// model a_user {
-//   id               Int                @id @default(autoincrement())
-//   isActive         Boolean?
-//   createdby        String             @db.VarChar(255)
-//   creationDate     DateTime?          @db.DateTime(0)
-//   modifiedBy       String?            @db.VarChar(255)
-//   modificationDate DateTime?          @db.DateTime(0)
-//   firstName        String             @db.VarChar(255)
-//   lastName         String             @db.VarChar(255)
-//   middleName       String             @db.VarChar(255)
- 
-//   contactNumber    String             @db.VarChar(255)
-
-//   role             String             @db.VarChar(255)
-//   password         String             @db.VarChar(255)
-  
-//   email            String             @unique(map: "email") @db.VarChar(255)
-//   t_borrowingbooks t_borrowingbooks[]
-// }
-
-
 model m_books {
-  id                Int              @id @default(autoincrement())
-   title            String             @db.VarChar(255)
-  author           String             @db.VarChar(255)
-  description      String?            @db.VarChar(255)
+  id               Int       @id @default(autoincrement())
+  title            String    @db.VarChar(255)
+  author           String    @db.VarChar(255)
+  description      String?   @db.VarChar(255)
   code             String
   isActive         Boolean?
-  createdby        String   ?          @db.VarChar(255)
-  creationDate     DateTime?          @default(now())
-  modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @default(now())
-   category            String
- 
-
+  createdby        String?   @db.VarChar(255)
+  creationDate     DateTime? @default(now())
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @default(now())
+  category         String
 }
+
 model m_ebooks {
-  id               Int                @id @default(autoincrement())
-  title            String             @db.VarChar(255)
-  author           String             @db.VarChar(255)
-  description      String?            @db.VarChar(255)
-  downloadLink     String?            @db.VarChar(255)
+  id               Int       @id @default(autoincrement())
+  title            String    @db.VarChar(255)
+  author           String    @db.VarChar(255)
+  description      String?   @db.VarChar(255)
+  downloadLink     String?   @db.VarChar(255)
   rating           Int?
-   isActive         Boolean?
-    category             String
-  creationDate     DateTime?         @default(now())
-  modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?         @default(now())
-  
+  isActive         Boolean?
+  category         String
+  creationDate     DateTime? @default(now())
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @default(now())
 }
 
 model m_booksInventory {
-  id               Int                @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
   isActive         Boolean?
-  createdby        String             @db.VarChar(255)
-  creationDate     DateTime?         @default(now())
-  modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @default(now())
+  createdby        String    @db.VarChar(255)
+  creationDate     DateTime? @default(now())
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @default(now())
   headerId         Int
-  code             String             @unique(map: "code") @db.VarChar(255)
-  
+  code             String    @unique(map: "code") @db.VarChar(255)
 
-  @@index([headerId], map: "booksInventoryRelationship")
 }
 
 model m_masterTable {
-  id                  Int                  @id @default(autoincrement())
-  title               String               @unique(map: "title") @db.VarChar(255)
-  note                String?              @db.VarChar(255)
-  isActive            Boolean?
-  createdby           String               @db.VarChar(255)
-  creationDate        DateTime?            @default(now())
-  modifiedBy          String?              @db.VarChar(255)
-  modificationDate    DateTime?           @default(now())
-
-}
-model m_masterTableValues {
-  id               Int           @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
+  title            String    @unique(map: "title") @db.VarChar(255)
+  note             String?   @db.VarChar(255)
   isActive         Boolean?
-  createdby        String        @db.VarChar(255)
-  creationDate     DateTime?    @default(now())
-  modifiedBy       String?       @db.VarChar(255)
-  modificationDate DateTime?     @default(now())
-  title            String        @db.VarChar(255)
-  headerId         Int
-
+  createdby        String    @db.VarChar(255)
+  creationDate     DateTime? @default(now())
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @default(now())
 }
+
+model m_masterTableValues {
+  id               Int       @id @default(autoincrement())
+  isActive         Boolean?
+  createdby        String    @db.VarChar(255)
+  creationDate     DateTime? @default(now())
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @default(now())
+  title            String    @db.VarChar(255)
+  headerId         Int
+}
+
 model t_borrowingbooks {
-  id                 Int              @id @default(autoincrement())
+  id                 Int       @id @default(autoincrement())
   isActive           Boolean?
-  createdby          String           @db.VarChar(255)
-  creationDate       DateTime?       @default(now())
-  modifiedBy         String?          @db.VarChar(255)
-  modificationDate   DateTime?        @default(now())
-  borrowingDate      DateTime         @default(now())
-  issuedDate         DateTime        @default(now())
-  targetreturnDate   DateTime         @default(now())
-  actualDateReturned DateTime?        @default(now())
+  createdby          String    @db.VarChar(255)
+  creationDate       DateTime? @default(now())
+  modifiedBy         String?   @db.VarChar(255)
+  modificationDate   DateTime? @default(now())
+  borrowingDate      DateTime  @default(now())
+  issuedDate         DateTime  @default(now())
+  targetreturnDate   DateTime  @default(now())
+  actualDateReturned DateTime? @default(now())
   isReturned         Boolean?
   isCancelled        Boolean?
   bookId             Int
-  bookCode           String           @db.VarChar(255)
-  note               String?          @db.VarChar(255)
+  bookCode           String    @db.VarChar(255)
+  note               String?   @db.VarChar(255)
 
-  // a_user             a_user           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingUser")
-
-  
-  @@index([bookCode], map: "borrowingbookinventory")
-  @@index([bookId], map: "borrowingbookrel")
 }
 
 model t_ebookdownloads {
@@ -197,7 +151,6 @@ model t_ebookdownloads {
   modificationDate DateTime? @default(now())
   bookId           Int
 
-  @@index([bookId], map: "ebookdownloads")
 }
 
 model testuser {
@@ -205,18 +158,17 @@ model testuser {
   username String
   password String
 }
+
 model l_books {
-  id               String           @id @default(cuid()) 
-   title            String             @db.VarChar(255)
-  author           String             @db.VarChar(255)
-  description      String?            @db.VarChar(255)
+  id               String    @id @default(cuid())
+  title            String    @db.VarChar(255)
+  author           String    @db.VarChar(255)
+  description      String?   @db.VarChar(255)
   code             String
   isActive         Boolean?
-  createdby        String   ?          @db.VarChar(255)
-  creationDate     DateTime?          @default(now())
-  modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?         @default(now())
-   category            String
- 
-
+  createdby        String?   @db.VarChar(255)
+  creationDate     DateTime? @default(now())
+  modifiedBy       String?   @db.VarChar(255)
+  modificationDate DateTime? @default(now())
+  category         String
 }

@@ -29,7 +29,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-
+import Link from "next/link";
 import Typography from "@mui/material/Typography";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -121,7 +121,8 @@ export default function CustomizedTables({ books }: book) {
     bookController.deleteBook(id);
     refreshData();
   };
-
+  const les =
+    "https://drive.google.com/uc?export=download&id=1JAYzSdZg4PkvaMHJ-g70iX6cPnr8uebq";
   return (
     <>
       <Grid container spacing={2}>
@@ -143,7 +144,13 @@ export default function CustomizedTables({ books }: book) {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small">Share</Button>
+              <Button
+                href="https://drive.google.com/uc?export=download&id=1JAYzSdZg4PkvaMHJ-g70iX6cPnr8uebq"
+                size="small"
+              >
+                Share
+              </Button>
+
               <Button size="small">Learn More</Button>
             </CardActions>
           </Card>

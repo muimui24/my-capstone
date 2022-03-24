@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -44,9 +44,9 @@ model User {
   image         String?
  
   isActive         Boolean? 
-  creationDate     DateTime?          @db.DateTime(0)
+  creationDate     DateTime?          @default(now())
   modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @db.DateTime(0)
+  modificationDate DateTime?          @default(now())
   firstName        String             @db.VarChar(255)
   lastName         String             @db.VarChar(255)
   middleName       String             @db.VarChar(255)
@@ -106,14 +106,12 @@ model m_books {
   code             String
   isActive         Boolean?
   createdby        String   ?          @db.VarChar(255)
-  creationDate     DateTime?          @db.DateTime(0)
+  creationDate     DateTime?          @default(now())
   modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @db.DateTime(0)
+  modificationDate DateTime?          @default(now())
    category            String
  
-  m_booksInventory m_booksInventory[]
-  t_borrowingbooks t_borrowingbooks[]
-  t_ebookdownloads t_ebookdownloads[]
+
 }
 model m_ebooks {
   id               Int                @id @default(autoincrement())
@@ -124,9 +122,9 @@ model m_ebooks {
   rating           Int?
    isActive         Boolean?
     category             String
-  creationDate     DateTime?          @db.DateTime(0)
+  creationDate     DateTime?         @default(now())
   modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @db.DateTime(0)
+  modificationDate DateTime?         @default(now())
   
 }
 
@@ -134,13 +132,12 @@ model m_booksInventory {
   id               Int                @id @default(autoincrement())
   isActive         Boolean?
   createdby        String             @db.VarChar(255)
-  creationDate     DateTime?          @db.DateTime(0)
+  creationDate     DateTime?         @default(now())
   modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @db.DateTime(0)
+  modificationDate DateTime?          @default(now())
   headerId         Int
   code             String             @unique(map: "code") @db.VarChar(255)
-  m_books          m_books            @relation(fields: [headerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "booksInventoryRelationship")
-  t_borrowingbooks t_borrowingbooks[]
+  
 
   @@index([headerId], map: "booksInventoryRelationship")
 }
@@ -151,46 +148,42 @@ model m_masterTable {
   note                String?              @db.VarChar(255)
   isActive            Boolean?
   createdby           String               @db.VarChar(255)
-  creationDate        DateTime?            @db.DateTime(0)
+  creationDate        DateTime?            @default(now())
   modifiedBy          String?              @db.VarChar(255)
-  modificationDate    DateTime?            @db.DateTime(0)
-  m_masterTableValues m_masterTableValues?
-}
+  modificationDate    DateTime?           @default(now())
 
+}
 model m_masterTableValues {
   id               Int           @id @default(autoincrement())
   isActive         Boolean?
   createdby        String        @db.VarChar(255)
-  creationDate     DateTime?     @db.DateTime(0)
+  creationDate     DateTime?    @default(now())
   modifiedBy       String?       @db.VarChar(255)
-  modificationDate DateTime?     @db.DateTime(0)
+  modificationDate DateTime?     @default(now())
   title            String        @db.VarChar(255)
   headerId         Int
-  m_masterTable    m_masterTable @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "m_masterTableRelationship")
-}
 
+}
 model t_borrowingbooks {
   id                 Int              @id @default(autoincrement())
   isActive           Boolean?
   createdby          String           @db.VarChar(255)
-  creationDate       DateTime?        @db.DateTime(0)
+  creationDate       DateTime?       @default(now())
   modifiedBy         String?          @db.VarChar(255)
-  modificationDate   DateTime?        @db.DateTime(0)
-  userId             Int 
-  borrowingDate      DateTime         @db.DateTime(0)
-  issuedDate         DateTime         @db.DateTime(0)
-  targetreturnDate   DateTime         @db.DateTime(0)
-  actualDateReturned DateTime?        @db.DateTime(0)
+  modificationDate   DateTime?        @default(now())
+  borrowingDate      DateTime         @default(now())
+  issuedDate         DateTime        @default(now())
+  targetreturnDate   DateTime         @default(now())
+  actualDateReturned DateTime?        @default(now())
   isReturned         Boolean?
   isCancelled        Boolean?
   bookId             Int
   bookCode           String           @db.VarChar(255)
   note               String?          @db.VarChar(255)
-  m_booksInventory   m_booksInventory @relation(fields: [bookCode], references: [code], onDelete: NoAction, onUpdate: NoAction, map: "borrowingbookinventory")
-  m_books            m_books          @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingbookrel")
+
   // a_user             a_user           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "borrowingUser")
 
-  @@index([userId], map: "borrowingUser")
+  
   @@index([bookCode], map: "borrowingbookinventory")
   @@index([bookId], map: "borrowingbookrel")
 }
@@ -199,11 +192,10 @@ model t_ebookdownloads {
   id               Int       @id @default(autoincrement())
   isActive         Boolean?
   createdby        String    @db.VarChar(255)
-  creationDate     DateTime? @db.DateTime(0)
+  creationDate     DateTime? @default(now())
   modifiedBy       String?   @db.VarChar(255)
-  modificationDate DateTime? @db.DateTime(0)
+  modificationDate DateTime? @default(now())
   bookId           Int
-  m_books          m_books   @relation(fields: [bookId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ebookdownloads")
 
   @@index([bookId], map: "ebookdownloads")
 }
@@ -221,9 +213,9 @@ model l_books {
   code             String
   isActive         Boolean?
   createdby        String   ?          @db.VarChar(255)
-  creationDate     DateTime?          @db.DateTime(0)
+  creationDate     DateTime?          @default(now())
   modifiedBy       String?            @db.VarChar(255)
-  modificationDate DateTime?          @db.DateTime(0)
+  modificationDate DateTime?         @default(now())
    category            String
  
 

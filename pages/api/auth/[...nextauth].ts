@@ -1,10 +1,9 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth from "next-auth";
 import { PrismaClient } from "@prisma/client";
-import EmailProvider from "next-auth/providers/email";
+
 import CredentialsProvider from "next-auth/providers/credentials";
-import { GetServerSideProps } from "next";
-import { parseStringStyle } from "@vue/shared";
+
 const prisma = new PrismaClient();
 
 export default NextAuth({

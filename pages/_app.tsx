@@ -28,7 +28,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useRouter } from "next/router";
 import { red } from "@mui/material/colors";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import SideNav from "../layout/AppBar";
+
 import AccountMenu from "../layout/account";
 import MenuList from "../layout/sidebar";
 

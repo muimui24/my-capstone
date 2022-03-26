@@ -211,6 +211,7 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
                     >
                       <DownloadForOfflineIcon />
                     </IconButton>
+                    <Button href={books.downloadLink}>DOWNLOAD</Button>
                   </Box>
                   <Box></Box>
                 </CardActions>

@@ -1,16 +1,16 @@
-import { m_books } from '@prisma/client';
-import { json } from 'node:stream/consumers';
-import { useState } from 'react';
-import { FormData } from '../models/bookModel';
+import { m_books } from "@prisma/client";
+import { json } from "node:stream/consumers";
+import { useState } from "react";
+import { FormData } from "../models/bookModel";
 
 export async function create(data: FormData) {
   try {
-    fetch('http://localhost:3000/api/book', {
+    fetch("https://olemr.herokuapp.com/api/book", {
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'POST',
+      method: "POST",
     }).then(() => {
       return;
     });
@@ -20,11 +20,11 @@ export async function create(data: FormData) {
 }
 export async function deleteBook(id: number) {
   try {
-    fetch('http://localhost:3000/api/book/' + id, {
+    fetch("https://olemr.herokuapp.com/api/book/" + id, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'DELETE',
+      method: "DELETE",
     }).then((res) => {
       return res.json();
     });
@@ -34,12 +34,12 @@ export async function deleteBook(id: number) {
 }
 export async function updateBook(id: number, data: FormData) {
   try {
-    fetch('http://localhost:3000/api/book/' + id, {
+    fetch("https://olemr.herokuapp.com/api/book/" + id, {
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'PUT',
+      method: "PUT",
     }).then(() => {
       return data;
     });
@@ -49,8 +49,8 @@ export async function updateBook(id: number, data: FormData) {
 }
 export async function getAll() {
   try {
-    const res = await fetch('http://localhost:3000/api/book', {
-      method: 'GET',
+    const res = await fetch("https://olemr.herokuapp.com/api/book", {
+      method: "GET",
     });
     const x = await res.json();
     console.log(x);

@@ -24,8 +24,6 @@ import { ebook, FormData } from "../models/ebookModel";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
 import * as ebookController from "../controller/ebooksController";
-import { redirect } from "next/dist/server/api-utils";
-import path from "path";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -54,6 +52,10 @@ export default function CustomizedTables({ ebooks }: ebook) {
       author: book.author,
       category: book.category,
       id: book.id,
+      description: book.description,
+      downloadLink: book.downloadLink,
+      image: book.image,
+      publisher: book.publisher,
     });
     handleClickOpen();
   }
@@ -61,8 +63,11 @@ export default function CustomizedTables({ ebooks }: ebook) {
     title: "",
     author: "",
     category: "",
-
     id: 0,
+    downloadLink: "",
+    description: "",
+    image: "",
+    publisher: "",
   });
 
   const handleSubmit = (data: FormData) => {
@@ -73,7 +78,16 @@ export default function CustomizedTables({ ebooks }: ebook) {
         ebookController.create(data);
       }
       handleClose();
-      setForm({ title: "", author: "", category: "", id: 0 });
+      setForm({
+        title: "",
+        author: "",
+        category: "",
+        id: 0,
+        downloadLink: "",
+        description: "",
+        image: "",
+        publisher: "",
+      });
       refreshData();
     } catch (error) {
       console.log(error);
@@ -93,6 +107,7 @@ export default function CustomizedTables({ ebooks }: ebook) {
 
   const handleClose = () => {
     setOpen(false);
+    refreshData();
   };
   if (status === "loading") {
     return <h1>loading</h1>;
@@ -141,6 +156,42 @@ export default function CustomizedTables({ ebooks }: ebook) {
             value={form.category}
             onChange={(e) => setForm({ ...form, category: e.target.value })}
           />
+          <TextField
+            margin="dense"
+            id="Download"
+            label="Download Link"
+            type="text"
+            fullWidth
+            value={form.downloadLink}
+            onChange={(e) => setForm({ ...form, downloadLink: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            id="description"
+            label="Description"
+            type="text"
+            fullWidth
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            id="image"
+            label="Thumbnail"
+            type="text"
+            fullWidth
+            value={form.image}
+            onChange={(e) => setForm({ ...form, image: e.target.value })}
+          />
+          <TextField
+            margin="dense"
+            id="image"
+            label="Publisher"
+            type="text"
+            fullWidth
+            value={form.publisher}
+            onChange={(e) => setForm({ ...form, publisher: e.target.value })}
+          />
         </DialogContent>
         <DialogActions>
           <Button
@@ -175,7 +226,7 @@ export default function CustomizedTables({ ebooks }: ebook) {
               <StyledTableCell>Action</StyledTableCell>
               <StyledTableCell>Book Title</StyledTableCell>
               <StyledTableCell align="right">Author</StyledTableCell>
-
+              <StyledTableCell align="right">Publisher</StyledTableCell>
               <StyledTableCell align="right">Category</StyledTableCell>
             </TableRow>
           </TableHead>
@@ -195,6 +246,9 @@ export default function CustomizedTables({ ebooks }: ebook) {
                 </StyledTableCell>
                 <StyledTableCell align="right">{books.author}</StyledTableCell>
 
+                <StyledTableCell align="right">
+                  {books.publisher}
+                </StyledTableCell>
                 <StyledTableCell align="right">
                   {books.category}
                 </StyledTableCell>

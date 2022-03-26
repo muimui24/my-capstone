@@ -1,9 +1,13 @@
 export interface ebook {
   ebooks: {
-    id: number;
     title: string;
     author: string;
     category: string;
+    id: number;
+    downloadLink: string;
+    description: string;
+    image: string;
+    publisher: string;
   }[];
 }
 
@@ -12,4 +16,21 @@ export interface FormData {
   author: string;
   category: string;
   id: number;
+  downloadLink: string;
+  description: string;
+  image: string;
+  publisher: string;
+}
+
+export interface searchEbook {
+  display: {
+    title: string;
+    author: string;
+    category: string;
+    id: number;
+    downloadLink: string;
+    description: string;
+    image: string;
+    publisher: string;
+  }[];
 }

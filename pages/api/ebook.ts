@@ -7,12 +7,24 @@ export default async function handler(
 ) {
   try {
     if (req.method === "POST") {
-      const { title, author, category } = req.body;
+      const {
+        title,
+        author,
+        category,
+        description,
+        downloadLink,
+        image,
+        publisher,
+      } = req.body;
       await prisma.m_ebooks.create({
         data: {
           title,
           author,
           category,
+          description,
+          downloadLink,
+          image,
+          publisher,
         },
       });
       res.status(200).json({ message: "Book Added" });
@@ -23,6 +35,10 @@ export default async function handler(
           title: true,
           author: true,
           category: true,
+          description: true,
+          downloadLink: true,
+          image: true,
+          publisher: true,
         },
       });
       res.status(200).json(ebooks);

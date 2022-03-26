@@ -81,12 +81,15 @@ model m_ebooks {
   author           String    @db.VarChar(255)
   description      String?   @db.VarChar(255)
   downloadLink     String?   @db.VarChar(255)
+  image String?
+  publisher String ?
   rating           Int?
   isActive         Boolean?
   category         String
   creationDate     DateTime? @default(now())
   modifiedBy       String?   @db.VarChar(255)
   modificationDate DateTime? @default(now())
+
 }
 
 model m_booksInventory {

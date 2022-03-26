@@ -7,7 +7,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button, Divider } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Container,
+  Divider,
+  Grid,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useRouter } from "next/router";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,6 +39,9 @@ import { useState } from "react";
 import { GetServerSideProps } from "next";
 import * as ebookController from "../controller/ebooksController";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { DisplaySettings } from "@mui/icons-material";
+import { Search } from "@material-ui/icons";
+import Link from "next/link";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -46,13 +63,26 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function CustomizedTables({ ebooks }: ebook) {
-  function onEdit(book: any) {
+export default function CustomizedTables(this: any, { ebooks }: ebook) {
+  const [filter, setFilter] = useState<ebook[]>();
+  const [searchInput, setSearchInput] = useState("");
+  const searchItems = (searchValue: string) => {
+    setSearchInput(searchValue);
+  };
+  const filtered = ebooks.filter((item) => {
+    return item.title.toLowerCase().includes(searchInput.toLowerCase());
+  });
+
+  function onEdit(books: any) {
     setForm({
-      title: book.title,
-      author: book.author,
-      category: book.category,
-      id: book.id,
+      title: books.title,
+      author: books.author,
+      category: books.category,
+      id: books.id,
+      description: books.description,
+      downloadLink: books.downloadLink,
+      image: books.image,
+      publisher: books.publisher,
     });
     handleClickOpen();
   }
@@ -60,8 +90,11 @@ export default function CustomizedTables({ ebooks }: ebook) {
     title: "",
     author: "",
     category: "",
-
     id: 0,
+    downloadLink: "",
+    description: "",
+    image: "",
+    publisher: "",
   });
 
   const handleSubmit = (data: FormData) => {
@@ -72,7 +105,16 @@ export default function CustomizedTables({ ebooks }: ebook) {
         ebookController.create(data);
       }
       handleClose();
-      setForm({ title: "", author: "", category: "", id: 0 });
+      setForm({
+        title: "",
+        author: "",
+        category: "",
+        id: 0,
+        downloadLink: "",
+        description: "",
+        image: "",
+        publisher: "",
+      });
       refreshData();
     } catch (error) {
       console.log(error);
@@ -93,6 +135,7 @@ export default function CustomizedTables({ ebooks }: ebook) {
   const handleClose = () => {
     setOpen(false);
   };
+
   if (status === "loading") {
     return <h1>loading</h1>;
   }
@@ -105,41 +148,78 @@ export default function CustomizedTables({ ebooks }: ebook) {
     refreshData();
   };
   return (
-    <>
+    <div>
       <h2>E-BOOKS</h2>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Action</StyledTableCell>
-              <StyledTableCell>Book Title</StyledTableCell>
-              <StyledTableCell align="right">Author</StyledTableCell>
-
-              <StyledTableCell align="right">Category</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {ebooks.map((books) => (
-              <StyledTableRow key={books.id}>
-                <StyledTableCell component="th" scope="row">
-                  <Button>
-                    <DownloadForOfflineIcon />{" "}
-                  </Button>
-                </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  {books.title}
-                </StyledTableCell>
-                <StyledTableCell align="right">{books.author}</StyledTableCell>
-
-                <StyledTableCell align="right">
-                  {books.category}
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+      <div className="mb-3 col-4 mx-auto">
+        <TextField
+          sx={{ width: "100%" }}
+          placeholder="Search..."
+          type="text"
+          onChange={(e) => searchItems(e.target.value)}
+        />
+      </div>
+      <br />
+      <Container sx={{ display: "flex", width: "100%" }}>
+        <Grid container spacing={2}>
+          {filtered.map((books) => (
+            <Grid item xs={10} sm={6} md={3} key={books.id}>
+              {" "}
+              <Card sx={{ maxWidth: "100%" }}>
+                <CardActionArea>
+                  <CardMedia
+                    sx={{
+                      height: 200,
+                    }}
+                    image={books.image}
+                    title={books.title}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h6" component="h5">
+                      {books.title}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      asdjlkasdj
+                      <br />
+                      By:{books.author}
+                      <br />
+                      Publisher:{books.publisher}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    margin: "0 10px",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box
+                    alignItems="center"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box></Box>{" "}
+                    <IconButton
+                      aria-label="add an alarm"
+                      href={books.downloadLink}
+                    >
+                      <DownloadForOfflineIcon />
+                    </IconButton>
+                  </Box>
+                  <Box></Box>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </div>
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {

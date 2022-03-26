@@ -15,10 +15,26 @@ export default async function handler(
   } else if (req.method === "PUT") {
     try {
       const ebookId = req.query.id;
-      const { title, author, category } = req.body;
+      const {
+        title,
+        author,
+        category,
+        description,
+        downloadLink,
+        image,
+        publisher,
+      } = req.body;
       const ebooks = await prisma.m_ebooks.update({
         where: { id: Number(ebookId) },
-        data: { title, author, category },
+        data: {
+          title,
+          author,
+          category,
+          description,
+          downloadLink,
+          image,
+          publisher,
+        },
       });
       res.json(ebooks);
     } catch (error) {

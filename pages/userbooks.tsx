@@ -10,16 +10,8 @@ import Paper from "@mui/material/Paper";
 import { Button, Divider } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useRouter } from "next/router";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import SearchIcon from "@mui/icons-material/Search";
-import { signIn, signOut, useSession } from "next-auth/react";
+
+import { signIn, useSession } from "next-auth/react";
 import { book, FormData } from "../models/bookModel";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
@@ -45,43 +37,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
 export default function CustomizedTables({ books }: book) {
-  function onEdit(book: any) {
-    setForm({
-      title: book.title,
-      author: book.author,
-      category: book.category,
-      code: book.code,
-      id: book.id,
-    });
-    handleClickOpen();
-  }
   const [form, setForm] = useState<FormData>({
     title: "",
     author: "",
@@ -126,10 +82,6 @@ export default function CustomizedTables({ books }: book) {
     signIn();
   }
 
-  const deleteBook = (id: number) => {
-    bookController.deleteBook(id);
-    refreshData();
-  };
   return (
     <>
       <h2>LIBRARY BOOKS</h2>

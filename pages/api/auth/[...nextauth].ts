@@ -1,7 +1,7 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth from "next-auth";
 import { PrismaClient } from "@prisma/client";
-
+import { signIn, signOut, useSession } from "next-auth/react";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 const prisma = new PrismaClient();
@@ -30,11 +30,10 @@ export default NextAuth({
         console.log();
         if (user !== null) {
           return user;
-        } else {
-          throw new Error(
-            "User does not exists. Please make sure you insert the correct email & password."
-          );
         }
+        return {
+          signIn,
+        };
       },
     }),
   ],

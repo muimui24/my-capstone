@@ -204,13 +204,6 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Box></Box>{" "}
-                    <IconButton
-                      aria-label="add an alarm"
-                      href={books.downloadLink}
-                    >
-                      <DownloadForOfflineIcon />
-                    </IconButton>
                     <Button href={books.downloadLink}>DOWNLOAD</Button>
                   </Box>
                   <Box></Box>

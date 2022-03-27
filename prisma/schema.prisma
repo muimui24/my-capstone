@@ -34,23 +34,24 @@ model Session {
 }
 
 model User {
-  id               String    @id @default(cuid())
+  id               String             @id @default(cuid())
   name             String?
-  role             String    @db.VarChar(255)
-  email            String?   @unique
+  role             String             @db.VarChar(255)
+  email            String?            @unique
   image            String?
   isActive         Boolean?
-  creationDate     DateTime? @default(now())
-  modifiedBy       String?   @db.VarChar(255)
-  modificationDate DateTime? @default(now())
-  firstName        String    @db.VarChar(255)
-  lastName         String    @db.VarChar(255)
-  middleName       String    @db.VarChar(255)
-  contactNumber    String    @db.VarChar(255)
+  creationDate     DateTime?          @default(now())
+  modifiedBy       String?            @db.VarChar(255)
+  modificationDate DateTime?          @default(now())
+  firstName        String             @db.VarChar(255)
+  lastName         String             @db.VarChar(255)
+  middleName       String             @db.VarChar(255)
+  contactNumber    String             @db.VarChar(255)
   userName         String
-  password         String    @db.VarChar(255)
+  password         String             @db.VarChar(255)
   accounts         Account[]
   sessions         Session[]
+  t_borrowingbooks t_borrowingbooks[]
 }
 
 model VerificationToken {
@@ -62,17 +63,19 @@ model VerificationToken {
 }
 
 model m_books {
-  id               Int       @id @default(autoincrement())
-  title            String    @db.VarChar(255)
-  author           String    @db.VarChar(255)
-  description      String?   @db.VarChar(255)
+  id Int @id @default(autoincrement())
+
+  title            String             @db.VarChar(255)
+  author           String             @db.VarChar(255)
+  description      String?            @db.VarChar(255)
   code             String
   isActive         Boolean?
-  createdby        String?   @db.VarChar(255)
-  creationDate     DateTime? @default(now())
-  modifiedBy       String?   @db.VarChar(255)
-  modificationDate DateTime? @default(now())
+  createdby        String?            @db.VarChar(255)
+  creationDate     DateTime?          @default(now())
+  modifiedBy       String?            @db.VarChar(255)
+  modificationDate DateTime?          @default(now())
   category         String
+  t_borrowingbooks t_borrowingbooks[]
 }
 
 model m_ebooks {
@@ -81,8 +84,8 @@ model m_ebooks {
   author           String    @db.VarChar(255)
   description      String?   @db.VarChar(255)
   downloadLink     String?   @db.VarChar(255)
-  image String?
-  publisher String ?
+  image            String?
+  publisher        String?
   rating           Int?
   isActive         Boolean?
   category         String
@@ -104,74 +107,23 @@ model m_booksInventory {
 
 }
 
-model m_masterTable {
-  id               Int       @id @default(autoincrement())
-  title            String    @unique(map: "title") @db.VarChar(255)
-  note             String?   @db.VarChar(255)
-  isActive         Boolean?
-  createdby        String    @db.VarChar(255)
-  creationDate     DateTime? @default(now())
-  modifiedBy       String?   @db.VarChar(255)
-  modificationDate DateTime? @default(now())
-}
-
-model m_masterTableValues {
-  id               Int       @id @default(autoincrement())
-  isActive         Boolean?
-  createdby        String    @db.VarChar(255)
-  creationDate     DateTime? @default(now())
-  modifiedBy       String?   @db.VarChar(255)
-  modificationDate DateTime? @default(now())
-  title            String    @db.VarChar(255)
-  headerId         Int
-}
-
 model t_borrowingbooks {
-  id                 Int       @id @default(autoincrement())
-  isActive           Boolean?
-  createdby          String    @db.VarChar(255)
-  creationDate       DateTime? @default(now())
-  modifiedBy         String?   @db.VarChar(255)
-  modificationDate   DateTime? @default(now())
-  borrowingDate      DateTime  @default(now())
-  issuedDate         DateTime  @default(now())
-  targetreturnDate   DateTime  @default(now())
-  actualDateReturned DateTime? @default(now())
-  isReturned         Boolean?
-  isCancelled        Boolean?
-  bookId             Int
-  bookCode           String    @db.VarChar(255)
-  note               String?   @db.VarChar(255)
-
-}
-
-model t_ebookdownloads {
   id               Int       @id @default(autoincrement())
-  isActive         Boolean?
-  createdby        String    @db.VarChar(255)
   creationDate     DateTime? @default(now())
-  modifiedBy       String?   @db.VarChar(255)
-  modificationDate DateTime? @default(now())
+  borrowingDate    DateTime  @default(now())
+  isApproved       Boolean?
+  quantity         Int
+  isIssued         Boolean
+  issuedDate       DateTime
+  targetreturnDate DateTime?
+  DateReturned     DateTime?
+  isReturned       Boolean?
+  isCancelled      Boolean?
   bookId           Int
+  book             m_books   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  bookCode         String
+  userId           String
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note             String?   @db.VarChar(255)
 
-}
-
-model testuser {
-  id       Int    @id
-  username String
-  password String
-}
-
-model l_books {
-  id               String    @id @default(cuid())
-  title            String    @db.VarChar(255)
-  author           String    @db.VarChar(255)
-  description      String?   @db.VarChar(255)
-  code             String
-  isActive         Boolean?
-  createdby        String?   @db.VarChar(255)
-  creationDate     DateTime? @default(now())
-  modifiedBy       String?   @db.VarChar(255)
-  modificationDate DateTime? @default(now())
-  category         String
 }

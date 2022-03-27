@@ -16,8 +16,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";
+import CustomizedTables from "./userEbook";
 
 import { Pagination } from "@mui/material";
+import { title } from "process";
 
 const sessionInfo = async () => {
   const ses = await getSession();

@@ -5,7 +5,7 @@ import { FormData } from "../models/ebookModel";
 
 export async function create(data: FormData) {
   try {
-    fetch("https://olemr.herokuapp.com/api/ebook", {
+    fetch("http://localhost:3000/api/ebook", {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +20,7 @@ export async function create(data: FormData) {
 }
 export async function deleteBook(id: number) {
   try {
-    fetch("https://olemr.herokuapp.com/api/e-book/" + id, {
+    fetch("http://localhost:3000/api/e-book/" + id, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -34,7 +34,7 @@ export async function deleteBook(id: number) {
 }
 export async function updateBook(id: number, data: FormData) {
   try {
-    fetch("https://olemr.herokuapp.com/api/e-book/" + id, {
+    fetch("http://localhost:3000/api/e-book/" + id, {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ export async function updateBook(id: number, data: FormData) {
 }
 export async function getAll() {
   try {
-    const res = await fetch("https://olemr.herokuapp.com/api/ebook", {
+    const res = await fetch("http://localhost:3000/api/ebook", {
       method: "GET",
     });
     const x = await res.json();

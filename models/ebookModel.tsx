@@ -34,3 +34,13 @@ export interface searchEbook {
     publisher: string;
   }[];
 }
+
+export interface borrowBook {
+  bookCode: String;
+  userId: String;
+  bookId: number;
+  isReturned: Boolean;
+  isCancelled: Boolean;
+  isApproved: Boolean;
+  isIssued: Boolean;
+}

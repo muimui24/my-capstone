@@ -16,6 +16,12 @@ import { book, FormData } from "../models/bookModel";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
 import * as bookController from "../controller/booksController";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -85,11 +91,38 @@ export default function CustomizedTables({ books }: book) {
   return (
     <>
       <Head>
-        <title>Ebooks</title>
+        <title>Books</title>
         <meta property="og:title" content="My page title" key="title" />
       </Head>
       <h2>LIBRARY BOOKS</h2>
 
+      <Dialog open={open}>
+        <DialogTitle>Book Details</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="title"
+            label="Title"
+            type="text"
+            fullWidth
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              {
+                handleSubmit(form);
+              }
+            }}
+          >
+            Submit
+          </Button>
+          <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
       <Divider />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -106,7 +139,7 @@ export default function CustomizedTables({ books }: book) {
             {books.map((books) => (
               <StyledTableRow key={books.id}>
                 <StyledTableCell align="left">
-                  <Button>Request Borrow</Button>
+                  <Button onClick={handleClickOpen}>Request Borrow</Button>
                 </StyledTableCell>
 
                 <StyledTableCell component="th" scope="row">

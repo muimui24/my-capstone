@@ -29,11 +29,9 @@ export default NextAuth({
         });
         console.log();
         if (user !== null) {
-          return user;
+          return signIn(), user;
         }
-        return {
-          signIn,
-        };
+        return null;
       },
     }),
   ],

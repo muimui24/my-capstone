@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import { Button, Divider } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useRouter } from "next/router";
-
+import Head from "next/head";
 import { signIn, useSession } from "next-auth/react";
 import { book, FormData } from "../models/bookModel";
 import { useState } from "react";
@@ -84,6 +84,10 @@ export default function CustomizedTables({ books }: book) {
 
   return (
     <>
+      <Head>
+        <title>Ebooks</title>
+        <meta property="og:title" content="My page title" key="title" />
+      </Head>
       <h2>LIBRARY BOOKS</h2>
 
       <Divider />

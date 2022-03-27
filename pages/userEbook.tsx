@@ -196,7 +196,7 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
       <br />
       <Container sx={{ display: "flex", width: "100%" }}>
         <Head>
-          <title>My page title</title>
+          <title>Ebooks</title>
           <meta property="og:title" content="My page title" key="title" />
         </Head>
         <Grid container>

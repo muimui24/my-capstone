@@ -1,16 +1,16 @@
-import { m_books } from "@prisma/client";
-import { json } from "node:stream/consumers";
-import { useState } from "react";
-import { FormData } from "../models/userModel";
-
+import { m_books } from '@prisma/client';
+import { json } from 'node:stream/consumers';
+import { useState } from 'react';
+import { FormData } from '../models/userModel';
+import { config } from '../config';
 export async function create(data: FormData) {
   try {
-    fetch("http://localhost:3000/api/user", {
+    fetch(`${config.url}/api/user`, {
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "POST",
+      method: 'POST',
     }).then(() => {
       return;
     });
@@ -20,11 +20,11 @@ export async function create(data: FormData) {
 }
 export async function deleteBook(id: string) {
   try {
-    fetch("http://localhost:3000/api/users/" + id, {
+    fetch(`${config.url}/api/users/${id}`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "DELETE",
+      method: 'DELETE',
     }).then((res) => {
       return res.json();
     });
@@ -34,12 +34,12 @@ export async function deleteBook(id: string) {
 }
 export async function updateBook(id: string, data: FormData) {
   try {
-    fetch("http://localhost:3000/api/users/" + id, {
+    fetch(`${config.url}/api/users/${id}`, {
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "PUT",
+      method: 'PUT',
     }).then(() => {
       return data;
     });
@@ -49,8 +49,8 @@ export async function updateBook(id: string, data: FormData) {
 }
 export async function getAll() {
   try {
-    const res = await fetch("http://localhost:3000/api/user", {
-      method: "GET",
+    const res = await fetch(`${config.url}/api/user`, {
+      method: 'GET',
     });
     const x = await res.json();
     console.log(x);

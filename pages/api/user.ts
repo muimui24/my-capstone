@@ -1,12 +1,12 @@
-import { prisma } from "../../lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from '../../lib/prisma';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    if (req.method === "POST") {
+    if (req.method === 'POST') {
       const {
         firstName,
         lastName,
@@ -25,10 +25,11 @@ export default async function handler(
           role,
           userName,
           password,
+          email: `${userName}@gmail.com`,
         },
       });
-      res.status(200).json({ message: "User Added" });
-    } else if (req.method === "GET") {
+      res.status(200).json({ message: 'User Added' });
+    } else if (req.method === 'GET') {
       const users = await prisma.user.findMany({
         select: {
           id: true,
@@ -44,6 +45,6 @@ export default async function handler(
       res.status(200).json(users);
     }
   } catch (error) {
-    console.log("Failure");
+    console.log('Failure');
   }
 }

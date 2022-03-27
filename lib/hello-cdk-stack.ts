@@ -1,20 +1,21 @@
-import * as core from "@aws-cdk/core";
-import * as s3 from "@aws-cdk/aws-s3";
-import { HttpMethods } from "@aws-cdk/aws-s3";
+import * as core from '@aws-cdk/core';
+import * as s3 from '@aws-cdk/aws-s3';
+import { HttpMethods } from '@aws-cdk/aws-s3';
+import { config } from '../config';
 
 export class HelloCdkStack extends core.Stack {
   constructor(scope: core.App, id: string, props?: core.StackProps) {
     super(scope, id, props);
 
-    new s3.Bucket(this, "MyFirstBucket", {
+    new s3.Bucket(this, 'MyFirstBucket', {
       versioned: true,
       removalPolicy: core.RemovalPolicy.DESTROY,
       publicReadAccess: false,
       cors: [
         {
-          allowedHeaders: ["*"],
+          allowedHeaders: ['*'],
           allowedMethods: [HttpMethods.POST],
-          allowedOrigins: ["http://localhost:3000"],
+          allowedOrigins: [config.url],
         },
       ],
     });

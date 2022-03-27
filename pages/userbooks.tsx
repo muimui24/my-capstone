@@ -12,7 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { signIn, useSession } from "next-auth/react";
-import { book, FormData } from "../models/bookModel";
+import { book, FormData, borrowBook } from "../models/bookModel";
 import { useState } from "react";
 import { GetServerSideProps } from "next";
 import * as bookController from "../controller/booksController";
@@ -22,6 +22,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { m_books } from "@prisma/client";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -44,23 +45,25 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function CustomizedTables({ books }: book) {
-  const [form, setForm] = useState<FormData>({
-    title: "",
-    author: "",
-    category: "",
-    code: "",
-    id: 0,
+  const [form, setForm] = useState<borrowBook>({
+    quantity: 0,
+    bookCode: "",
+    bookId: 0,
   });
+  let selectedBookId: number = 0;
 
-  const handleSubmit = (data: FormData) => {
+  const handleSubmit = (data: borrowBook, bookId: number) => {
     try {
-      if (data.id) {
-        bookController.updateBook(data.id, data);
-      } else {
-        bookController.create(data);
+      const bookDetailIndex = books.findIndex((x) => x.id === bookId);
+      const bookDetail = books[bookDetailIndex];
+
+      if (data.quantity > 0) {
+        data.bookCode = bookDetail.code;
+        data.bookId = bookDetail.id;
+        bookController.borrow(data);
       }
       handleClose();
-      setForm({ title: "", author: "", category: "", code: "", id: 0 });
+      setForm({ quantity: 0, bookCode: "", bookId: 0 });
       refreshData();
     } catch (error) {
       console.log(error);
@@ -74,8 +77,9 @@ export default function CustomizedTables({ books }: book) {
     router.replace(router.asPath);
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (id: number) => {
     setOpen(true);
+    selectedBookId = id;
   };
 
   const handleClose = () => {
@@ -97,24 +101,26 @@ export default function CustomizedTables({ books }: book) {
       <h2>LIBRARY BOOKS</h2>
 
       <Dialog open={open}>
-        <DialogTitle>Book Details</DialogTitle>
+        <DialogTitle>Book Details - {selectedBookId}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
             id="title"
             label="Title"
-            type="text"
+            type=""
             fullWidth
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            value={form.quantity}
+            onChange={(e) =>
+              setForm({ ...form, quantity: Number(e.target.value ?? 0) })
+            }
           />
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
               {
-                handleSubmit(form);
+                handleSubmit(form, selectedBookId);
               }
             }}
           >
@@ -136,20 +142,20 @@ export default function CustomizedTables({ books }: book) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map((books) => (
-              <StyledTableRow key={books.id}>
+            {books.map((book) => (
+              <StyledTableRow key={book.id}>
                 <StyledTableCell align="left">
-                  <Button onClick={handleClickOpen}>Request Borrow</Button>
+                  <Button onClick={() => handleClickOpen(book.id)}>
+                    Request Borrow
+                  </Button>
                 </StyledTableCell>
 
                 <StyledTableCell component="th" scope="row">
-                  {books.title}
+                  {book.title}
                 </StyledTableCell>
-                <StyledTableCell align="right">{books.author}</StyledTableCell>
-                <StyledTableCell align="right">{books.code}</StyledTableCell>
-                <StyledTableCell align="right">
-                  {books.category}
-                </StyledTableCell>
+                <StyledTableCell align="right">{book.author}</StyledTableCell>
+                <StyledTableCell align="right">{book.code}</StyledTableCell>
+                <StyledTableCell align="right">{book.category}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>

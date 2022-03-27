@@ -108,22 +108,22 @@ model m_booksInventory {
 }
 
 model t_borrowingbooks {
-  id               Int       @id @default(autoincrement())
-  creationDate     DateTime? @default(now())
-  borrowingDate    DateTime  @default(now())
-  isApproved       Boolean?
-  quantity         Int
-  isIssued         Boolean
-  issuedDate       DateTime
+  id            Int       @id @default(autoincrement())
+  creationDate  DateTime? @default(now())
+  borrowingDate DateTime  @default(now())
+  isApproved    Boolean?  @default(false)
+
+  isIssued         Boolean?  @default(false)
+  issuedDate       DateTime?
   targetreturnDate DateTime?
   DateReturned     DateTime?
-  isReturned       Boolean?
-  isCancelled      Boolean?
+  isReturned       Boolean?  @default(false)
+  isCancelled      Boolean?  @default(false)
   bookId           Int
-  book             m_books   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  book             m_books?  @relation(fields: [bookId], references: [id], onDelete: Cascade)
   bookCode         String
   userId           String
-  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user             User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   note             String?   @db.VarChar(255)
-
+  quantity         Int
 }

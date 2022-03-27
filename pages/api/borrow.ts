@@ -1,0 +1,56 @@
+import { prisma } from "../../lib/prisma";
+import { NextApiRequest, NextApiResponse } from "next";
+
+import { signIn, signOut, useSession } from "next-auth/react";
+
+export default async function Handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { data: session, status } = useSession();
+
+  try {
+    const email = session?.user?.email;
+    const user = await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    if (req.method === "POST") {
+      const { quantity, bookId, bookCode } = req.body;
+
+      await prisma.t_borrowingbooks.create({
+        data: {
+          quantity,
+          isIssued: false,
+          bookId,
+          userId: user?.id,
+          bookCode,
+        },
+      });
+      res.status(200).json({ message: "Book Added" });
+    } else if (req.method === "GET") {
+      const books = await prisma.t_borrowingbooks.findMany({
+        select: {
+          quantity: true,
+          isIssued: true,
+          bookId: true,
+          issuedDate: true,
+          borrowingDate: true,
+          userId: true,
+          DateReturned: true,
+          targetreturnDate: true,
+          creationDate: true,
+          isApproved: true,
+          isCancelled: true,
+          isReturned: true,
+          id: true,
+        },
+      });
+      res.status(200).json(books);
+    }
+  } catch (error) {
+    console.log("Failure");
+  }
+}

@@ -15,3 +15,8 @@ export interface FormData {
   code: string;
   id: number;
 }
+export interface borrowBook {
+  quantity: number;
+  bookId: number;
+  bookCode: string;
+}

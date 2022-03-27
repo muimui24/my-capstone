@@ -63,8 +63,7 @@ model VerificationToken {
 }
 
 model m_books {
-  id Int @id @default(autoincrement())
-
+  id               Int                @id @default(autoincrement())
   title            String             @db.VarChar(255)
   author           String             @db.VarChar(255)
   description      String?            @db.VarChar(255)
@@ -92,7 +91,6 @@ model m_ebooks {
   creationDate     DateTime? @default(now())
   modifiedBy       String?   @db.VarChar(255)
   modificationDate DateTime? @default(now())
-
 }
 
 model m_booksInventory {
@@ -104,15 +102,14 @@ model m_booksInventory {
   modificationDate DateTime? @default(now())
   headerId         Int
   code             String    @unique(map: "code") @db.VarChar(255)
-
 }
 
 model t_borrowingbooks {
-  id            Int       @id @default(autoincrement())
-  creationDate  DateTime? @default(now())
-  borrowingDate DateTime  @default(now())
-  isApproved    Boolean?  @default(false)
-
+  id               Int       @id @default(autoincrement())
+  creationDate     DateTime? @default(now())
+  borrowingDate    DateTime  @default(now())
+  isApproved       Boolean?  @default(false)
+  quantity         Int
   isIssued         Boolean?  @default(false)
   issuedDate       DateTime?
   targetreturnDate DateTime?
@@ -120,10 +117,9 @@ model t_borrowingbooks {
   isReturned       Boolean?  @default(false)
   isCancelled      Boolean?  @default(false)
   bookId           Int
-  book             m_books?  @relation(fields: [bookId], references: [id], onDelete: Cascade)
   bookCode         String
   userId           String
-  user             User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   note             String?   @db.VarChar(255)
-  quantity         Int
+  book             m_books   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

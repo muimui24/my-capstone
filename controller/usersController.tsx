@@ -2,10 +2,9 @@ import { m_books } from '@prisma/client';
 import { json } from 'node:stream/consumers';
 import { useState } from 'react';
 import { FormData } from '../models/userModel';
-import { config } from '../config';
 export async function create(data: FormData) {
   try {
-    fetch(`${config.url}/api/user`, {
+    fetch(`http://localhost:3000/api/user`, {
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
@@ -20,7 +19,7 @@ export async function create(data: FormData) {
 }
 export async function deleteBook(id: string) {
   try {
-    fetch(`${config.url}/api/users/${id}`, {
+    fetch(`http://localhost:3000/api/users/${id}`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -34,7 +33,7 @@ export async function deleteBook(id: string) {
 }
 export async function updateBook(id: string, data: FormData) {
   try {
-    fetch(`${config.url}/api/users/${id}`, {
+    fetch(`http://localhost:3000/api/users/${id}`, {
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +48,7 @@ export async function updateBook(id: string, data: FormData) {
 }
 export async function getAll() {
   try {
-    const res = await fetch(`${config.url}/api/user`, {
+    const res = await fetch(`http://localhost:3000/api/user`, {
       method: 'GET',
     });
     const x = await res.json();

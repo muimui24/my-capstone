@@ -19,4 +19,5 @@ export interface borrowBook {
   quantity: number;
   bookId: number;
   bookCode: string;
+  email: string;
 }

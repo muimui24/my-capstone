@@ -1,36 +1,32 @@
-import { prisma } from "../../lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
+import { prisma } from '../../lib/prisma';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from 'next-auth/react';
 
-export default async function Handler(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { data: session, status } = useSession();
-
   try {
-    const email = session?.user?.email;
-    const user = await prisma.user.findFirst({
-      where: {
-        email: email,
-      },
-    });
+    if (req.method === 'POST') {
+      const { quantity, bookId, bookCode, email } = req.body;
 
-    if (req.method === "POST") {
-      const { quantity, bookId, bookCode } = req.body;
-
-      await prisma.t_borrowingbooks.create({
-        data: {
-          quantity,
-          isIssued: false,
-          bookId,
-          userId: user?.id,
-          bookCode,
+      const user = await prisma.user.findFirst({
+        where: {
+          email: email,
         },
       });
-      res.status(200).json({ message: "Book Added" });
-    } else if (req.method === "GET") {
+      await prisma.t_borrowingbooks.create({
+        data: {
+          quantity: quantity,
+          isIssued: false,
+          bookId: bookId,
+          userId: user?.id,
+          bookCode: bookCode,
+        },
+      });
+      res.status(200).json({ message: 'Book Added' });
+    } else if (req.method === 'GET') {
       const books = await prisma.t_borrowingbooks.findMany({
         select: {
           quantity: true,
@@ -51,6 +47,6 @@ export default async function Handler(
       res.status(200).json(books);
     }
   } catch (error) {
-    console.log("Failure");
+    console.log(error);
   }
 }

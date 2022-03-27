@@ -1,17 +1,16 @@
-import { m_books } from "@prisma/client";
-import { json } from "node:stream/consumers";
-import { useState } from "react";
-import { FormData, borrowBook } from "../models/bookModel";
-import { config } from "../config";
+import { m_books } from '@prisma/client';
+import { json } from 'node:stream/consumers';
+import { useState } from 'react';
+import { FormData, borrowBook } from '../models/bookModel';
 
 export async function create(data: FormData) {
   try {
-    fetch(`${config.url}/api/book`, {
+    fetch(`http://localhost:3000/api/book`, {
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "POST",
+      method: 'POST',
     }).then(() => {
       return;
     });
@@ -21,11 +20,11 @@ export async function create(data: FormData) {
 }
 export async function deleteBook(id: number) {
   try {
-    fetch(`${config.url}/api/book/${id}`, {
+    fetch(`http://localhost:3000/api/book/${id}`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "DELETE",
+      method: 'DELETE',
     }).then((res) => {
       return res.json();
     });
@@ -35,12 +34,12 @@ export async function deleteBook(id: number) {
 }
 export async function updateBook(id: number, data: FormData) {
   try {
-    fetch(`${config.url}/api/book/${id}`, {
+    fetch(`http://localhost:3000/api/book/${id}`, {
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "PUT",
+      method: 'PUT',
     }).then(() => {
       return data;
     });
@@ -50,11 +49,10 @@ export async function updateBook(id: number, data: FormData) {
 }
 export async function getAll() {
   try {
-    const res = await fetch(`${config.url}/api/book`, {
-      method: "GET",
+    const res = await fetch(`http://localhost:3000/api/book`, {
+      method: 'GET',
     });
     const x = await res.json();
-    console.log(x);
     return x;
   } catch (error) {
     console.log(error);
@@ -62,12 +60,12 @@ export async function getAll() {
 }
 export async function borrow(data: borrowBook) {
   try {
-    fetch("http://localhost:3000/api/borrow", {
+    fetch(`http://localhost:3000/api/borrow`, {
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "POST",
+      method: 'POST',
     }).then(() => {
       return;
     });

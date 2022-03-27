@@ -1,5 +1,6 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
+import Head from "next/head";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
@@ -39,9 +40,13 @@ import { useState } from "react";
 import { GetServerSideProps } from "next";
 import * as ebookController from "../controller/ebooksController";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-import { DisplaySettings } from "@mui/icons-material";
+import { DisplaySettings, SelectAll } from "@mui/icons-material";
 import { Search } from "@material-ui/icons";
 import Link from "next/link";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -64,12 +69,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function CustomizedTables(this: any, { ebooks }: ebook) {
-  const [filter, setFilter] = useState<ebook[]>();
+  // const [filter, setFilter] = useState<ebook[]>();
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value as string);
+  };
   const [searchInput, setSearchInput] = useState("");
   const searchItems = (searchValue: string) => {
     setSearchInput(searchValue);
   };
   const filtered = ebooks.filter((item) => {
+    if (age === "category") {
+      return item.category.toLowerCase().includes(searchInput.toLowerCase());
+    } else if (age === "author") {
+      return item.author.toLowerCase().includes(searchInput.toLowerCase());
+    } else if (age === "title") {
+      return item.title.toLowerCase().includes(searchInput.toLowerCase());
+    }
     return item.title.toLowerCase().includes(searchInput.toLowerCase());
   });
 
@@ -150,19 +167,41 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
   return (
     <div>
       <h2>E-BOOKS</h2>
-      <div className="mb-3 col-4 mx-auto">
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <TextField
-          sx={{ width: "100%" }}
+          sx={{ width: "75%", display: "flex" }}
           placeholder="Search..."
           type="text"
           onChange={(e) => searchItems(e.target.value)}
         />
-      </div>
+        <FormControl sx={{ width: "25%", display: "flex" }}>
+          <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={age}
+            label="Filter"
+            onChange={handleChange}
+          >
+            <MenuItem selected value="title">
+              By Title
+            </MenuItem>
+            <MenuItem value="category">By Category</MenuItem>
+            <MenuItem value="author">By Author</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      <div className="mb-3 col-4 mx-auto"></div>
       <br />
       <Container sx={{ display: "flex", width: "100%" }}>
-        <Grid container spacing={2}>
+        <Head>
+          <title>My page title</title>
+          <meta property="og:title" content="My page title" key="title" />
+        </Head>
+        <Grid container>
           {filtered.map((books) => (
-            <Grid item xs={10} sm={6} md={3} key={books.id}>
+            <Grid margin={1.5} item xs={10} sm={6} md={3} key={books.id}>
               {" "}
               <Card sx={{ maxWidth: "100%" }}>
                 <CardActionArea>
@@ -174,7 +213,12 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
                     title={books.title}
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h6" component="h5">
+                    <Typography
+                      sx={{ display: "flex" }}
+                      gutterBottom
+                      variant="h6"
+                      component="h5"
+                    >
                       {books.title}
                     </Typography>
                     <Typography
@@ -182,11 +226,13 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
                       color="textSecondary"
                       component="p"
                     >
-                      asdjlkasdj
+                      {books.description}
                       <br />
                       By:{books.author}
                       <br />
                       Publisher:{books.publisher}
+                      <br />
+                      Category: {books.category}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

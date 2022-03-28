@@ -71,3 +71,18 @@ export async function issue(id: number, data: any) {
     console.log(error);
   }
 }
+export async function reject(id: number, data: any) {
+  try {
+    fetch(`http://localhost:3000/api/borrow/reject/${id}`, {
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    }).then((res) => {
+      return res.body;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

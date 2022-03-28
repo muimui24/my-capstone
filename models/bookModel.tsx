@@ -42,6 +42,7 @@ export interface borrowBooks {
     isApproved: boolean;
     isCancelled: boolean;
     cancelledDate: string;
+    targetreturnDate: string;
     isReturned: boolean;
     isReject: boolean;
     reasonForRejection: string;

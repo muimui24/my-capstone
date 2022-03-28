@@ -27,3 +27,18 @@ export async function updateBook(id: number, data: borrowBook) {
     console.log(error);
   }
 }
+
+export async function cancel(id: number) {
+  try {
+    fetch(`http://localhost:3000/api/borrow/cancel/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    }).then((res) => {
+      return res.body;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

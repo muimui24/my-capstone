@@ -1,3 +1,9 @@
+import { Select } from "@material-ui/core";
+import { RelationshipList } from "aws-sdk/clients/configservice";
+import { RelationshipValue } from "aws-sdk/clients/iottwinmaker";
+import { RelationalDatabaseList } from "aws-sdk/clients/lightsail";
+import { title } from "process";
+
 export interface book {
   books: {
     id: number;
@@ -31,11 +37,11 @@ export interface borrowBooks {
     issuedDate: boolean;
     userId: string;
     DateReturned: boolean;
-    targetreturnDate: boolean;
     creationDate: boolean;
     isApproved: boolean;
     isCancelled: boolean;
     isReturned: boolean;
     id: number;
+    bookTitle: string;
   }[];
 }

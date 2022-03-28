@@ -1,6 +1,6 @@
-import { FormData, borrowBook } from "../models/bookModel";
+import { FormData, borrowBook, borrowBooks } from "../models/bookModel";
 
-export async function getAllByUserEmail(email: string) {
+export async function getAllByUserEmail<borrowBooks>(email: string) {
   try {
     const res = fetch(`http://localhost:3000/api/borrow?email=${email}`, {
       method: "GET",

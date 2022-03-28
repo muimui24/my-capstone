@@ -75,7 +75,7 @@ export default function CustomizedTables({ books }: book) {
     quantity: 0,
     bookCode: "",
     bookId: 0,
-    email: session?.user?.email,
+    email: session?.user?.email ?? "",
   });
 
   const [selectedBookId, setBook] = useState<number>();
@@ -102,8 +102,10 @@ export default function CustomizedTables({ books }: book) {
         data.bookId = bookDetail.id;
         bookController.borrow(data);
       }
+
       handleClose();
-      setForm({ quantity: 0, bookCode: "", bookId: 0, userId: user.id });
+      const user = session?.user?.email;
+      // setForm({ quantity: 0, bookCode: "", bookId: 0, userId: user?.id ?? '' });
       refreshData();
     } catch (error) {
       console.log(error);
@@ -195,7 +197,7 @@ export default function CustomizedTables({ books }: book) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filtered.map((book) => (
+            {books.map((book) => (
               <StyledTableRow key={book.id}>
                 <StyledTableCell align="left">
                   <Button onClick={() => handleClickOpen(book.id)}>
@@ -219,7 +221,7 @@ export default function CustomizedTables({ books }: book) {
 }
 export const getServerSideProps: GetServerSideProps = async () => {
   const books = await bookController.getAll();
-
+  console.log(books);
   return {
     props: {
       books,

@@ -44,12 +44,22 @@ export default async function handler(
           borrowingDate: true,
           userId: true,
           DateReturned: true,
-          targetreturnDate: true,
           creationDate: true,
           isApproved: true,
           isCancelled: true,
           isReturned: true,
+          bookCode: true,
           id: true,
+          book: {
+            select: {
+              title: true,
+            },
+          },
+          user: {
+            select: {
+              name: true,
+            },
+          },
         },
       });
       res.status(200).json(books);

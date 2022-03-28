@@ -27,6 +27,8 @@ import { GetServerSideProps } from "next";
 import * as userController from "../controller/usersController";
 import * as borrowController from "../controller/borrowContoller";
 import { Session } from "inspector";
+import { title } from "process";
+import { Book } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -155,7 +157,7 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
                   {borrow.bookId}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {borrow.bookCode}
+                  {borrow.book?.title}
                 </StyledTableCell>
                 <StyledTableCell align="right">
                   {borrow.isApproved ? "Approved" : "Pending"}
@@ -178,8 +180,29 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {
-  const borrows = await borrowController.getAllByUserEmail(String(userEmail));
+  const borrowsSource = await borrowController.getAllByUserEmail<borrowBooks>(String(userEmail));
+  var borrows: borrowBooks[];
 
+  borrowsSource.forEach((x) => {
+      borrows.push({
+        quantity: x.
+        isIssued: false,
+        bookId: 2,
+        issuedDate: null,
+        borrowingDate: "2022-03-28T13:25:42.006Z",
+        userId: "cl1apxscp0094bkoo1tyjl0gz",
+        DateReturned: null,
+        creationDate: "2022-03-28T13:25:42.006Z",
+        isApproved: false,
+        isCancelled: false,
+        isReturned: false,
+        bookCode: "asdasd",
+        id: 15,
+        bookTtitl: { title: "asdasda" },
+        user: { name: null },
+      });
+  });
+  console.log(borrows);
   return {
     props: {
       borrows,

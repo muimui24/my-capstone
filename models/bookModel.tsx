@@ -21,3 +21,11 @@ export interface borrowBook {
   bookCode: string;
   email: string;
 }
+export interface borrowBooks {
+  borrows: {
+    quantity: number;
+    bookId: number;
+    bookCode: string;
+    email: string;
+  };
+}

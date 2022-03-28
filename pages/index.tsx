@@ -29,6 +29,21 @@ const sessionInfo = async () => {
 const Home = () => {
   const { data: session, status } = useSession();
   const [open, setOpen] = React.useState(false);
+  const styles = {
+    paperContainer: {
+      backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.imgur.com/GnngaBa.png')`,
+      height: "600px",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      position: "relative",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      color: "#fff",
+      fontSize: "3rem",
+    },
+  };
   console.log(sessionInfo());
   if (status === "loading") {
     return <h1>loading</h1>;
@@ -40,23 +55,9 @@ const Home = () => {
 
   return (
     <>
-      {/* <Box
-        sx={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1558981852-426c6c22a060?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80')`,
-          height: "300px",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          color: "#fff",
-          fontSize: "4rem",
-        }}
-      >
-        <Box>React</Box>
-      </Box> */}
+      <Box style={styles.paperContainer}>
+        Online Library: Ebook Management And Repository
+      </Box>
     </>
   );
 };

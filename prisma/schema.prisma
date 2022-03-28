@@ -120,6 +120,7 @@ model t_borrowingbooks {
   cancelledDate      DateTime?
   isReject           Boolean?  @default(false)
   reasonForRejection String?
+  bookCondtion       String?
   rejectionDate      DateTime?
   bookId             Int
   bookCode           String

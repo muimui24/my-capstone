@@ -125,9 +125,7 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
     userController.deleteBook(id);
     refreshData();
   };
-  const filtered = borrows.filter(
-    (x) => x.user.email === (session?.user?.email ?? '') && !x.isCancelled
-  );
+  const filtered = borrows.filter((x) => !x.isCancelled);
 
   const formatDate = (date: string): string => {
     return moment(date, 'YYYY-MM-DDTHH:mm:ss.sssZ').format(
@@ -142,6 +140,7 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
+              <StyledTableCell align='left'>Borrower</StyledTableCell>
               <StyledTableCell align='left'>Dated Borrow</StyledTableCell>
               <StyledTableCell align='left'>Book Code</StyledTableCell>
               <StyledTableCell align='left'>Book</StyledTableCell>
@@ -169,6 +168,9 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
                       Cancel
                     </Button>
                   ) : null}
+                </StyledTableCell>
+                <StyledTableCell align='left'>
+                  {borrow.user.name}
                 </StyledTableCell>
                 <StyledTableCell align='left'>
                   {formatDate(borrow.creationDate)}

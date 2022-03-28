@@ -1,13 +1,13 @@
-import { prisma } from "../../lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { prisma } from '../../lib/prisma';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    if (req.method === "POST") {
+    if (req.method === 'POST') {
       const { quantity, bookId, bookCode, email } = req.body;
 
       const user = await prisma.user.findFirst({
@@ -20,22 +20,13 @@ export default async function handler(
           quantity: parseInt(quantity, 0),
           isIssued: false,
           bookId: parseInt(bookId ?? 0),
-          userId: user?.id ?? "",
+          userId: user?.id ?? '',
           bookCode: bookCode,
         },
       });
-      res.status(200).json({ message: "Book Added" });
-    } else if (req.method === "GET") {
-      const email: any = req.query.email;
-      const user = await prisma.user.findFirst({
-        where: {
-          email: email,
-        },
-      });
+      res.status(200).json({ message: 'Book Added' });
+    } else if (req.method === 'GET') {
       const books = await prisma.t_borrowingbooks.findMany({
-        where: {
-          userId: user?.id,
-        },
         select: {
           quantity: true,
           isIssued: true,
@@ -49,6 +40,10 @@ export default async function handler(
           isCancelled: true,
           isReturned: true,
           bookCode: true,
+          approvalDate: true,
+          isReject: true,
+          reasonForRejection: true,
+          rejectionDate: true,
           id: true,
           book: {
             select: {
@@ -58,6 +53,7 @@ export default async function handler(
           user: {
             select: {
               name: true,
+              email: true,
             },
           },
         },

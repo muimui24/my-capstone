@@ -1,9 +1,9 @@
-import { FormData, borrowBook, borrowBooks } from "../models/bookModel";
+import { FormData, borrowBook, borrowBooks } from '../models/bookModel';
 
-export async function getAllByUserEmail<borrowBooks>(email: string) {
+export async function getAllByUserEmail() {
   try {
-    const res = fetch(`http://localhost:3000/api/borrow?email=${email}`, {
-      method: "GET",
+    const res = fetch(`http://localhost:3000/api/borrow`, {
+      method: 'GET',
     });
     const x = await (await res).json();
     console.log(x);
@@ -17,9 +17,9 @@ export async function updateBook(id: number, data: borrowBook) {
     fetch(`http://localhost:3000/api/book/${id}`, {
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "PUT",
+      method: 'PUT',
     }).then(() => {
       return data;
     });

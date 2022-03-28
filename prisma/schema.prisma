@@ -117,6 +117,7 @@ model t_borrowingbooks {
   approvalDate       DateTime?
   isReturned         Boolean?  @default(false)
   isCancelled        Boolean?  @default(false)
+  cancelledDate      DateTime?
   isReject           Boolean?  @default(false)
   reasonForRejection String?
   rejectionDate      DateTime?

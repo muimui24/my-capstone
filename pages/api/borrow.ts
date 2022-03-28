@@ -38,6 +38,7 @@ export default async function handler(
           creationDate: true,
           isApproved: true,
           isCancelled: true,
+          cancelledDate: true,
           isReturned: true,
           bookCode: true,
           approvalDate: true,

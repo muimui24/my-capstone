@@ -1,6 +1,5 @@
 import { prisma } from '../../lib/prisma';
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default async function handler(
@@ -18,16 +17,25 @@ export default async function handler(
       });
       await prisma.t_borrowingbooks.create({
         data: {
-          quantity: quantity,
+          quantity: parseInt(quantity, 0),
           isIssued: false,
-          bookId: bookId,
-          userId: user?.id,
+          bookId: parseInt(bookId ?? 0),
+          userId: user?.id ?? '',
           bookCode: bookCode,
         },
       });
       res.status(200).json({ message: 'Book Added' });
     } else if (req.method === 'GET') {
+      const email: any = req.query.email;
+      const user = await prisma.user.findFirst({
+        where: {
+          email: email,
+        },
+      });
       const books = await prisma.t_borrowingbooks.findMany({
+        where: {
+          userId: user?.id,
+        },
         select: {
           quantity: true,
           isIssued: true,

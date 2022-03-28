@@ -70,7 +70,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function CustomizedTables(this: any, { ebooks }: ebook) {
   // const [filter, setFilter] = useState<ebook[]>();
-  const [age, setAge] = React.useState("");
+  const [searchBy, setAge] = React.useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
@@ -80,11 +80,11 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
     setSearchInput(searchValue);
   };
   const filtered = ebooks.filter((item) => {
-    if (age === "category") {
+    if (searchBy === "category") {
       return item.category.toLowerCase().includes(searchInput.toLowerCase());
-    } else if (age === "author") {
+    } else if (searchBy === "author") {
       return item.author.toLowerCase().includes(searchInput.toLowerCase());
-    } else if (age === "title") {
+    } else if (searchBy === "title") {
       return item.title.toLowerCase().includes(searchInput.toLowerCase());
     }
     return item.title.toLowerCase().includes(searchInput.toLowerCase());
@@ -179,7 +179,7 @@ export default function CustomizedTables(this: any, { ebooks }: ebook) {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={age}
+            value={searchBy}
             label="Filter"
             onChange={handleChange}
           >
@@ -271,3 +271,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
     },
   };
 };
+
+export const;

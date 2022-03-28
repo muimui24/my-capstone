@@ -47,6 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+var userEmail: string = "";
 
 export default function CustomizedTables({ borrows }: borrowBooks) {
   function onEdit(user: any) {
@@ -116,6 +117,8 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
   }
   if (session == undefined) {
     signIn();
+  } else {
+    userEmail = session?.user?.email ?? "";
   }
 
   const deleteBook = (id: string) => {
@@ -131,41 +134,43 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
-              <StyledTableCell>Action</StyledTableCell>
               <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell align="right">First Name</StyledTableCell>
-              <StyledTableCell align="right">Middle Name</StyledTableCell>
+              <StyledTableCell align="right">Book ID</StyledTableCell>
+              <StyledTableCell align="right">Book Code</StyledTableCell>
 
-              <StyledTableCell align="right">Last Name</StyledTableCell>
-              <StyledTableCell align="right">Cellphone Number</StyledTableCell>
-              <StyledTableCell align="right">Role</StyledTableCell>
+              <StyledTableCell align="right">Approved</StyledTableCell>
+              <StyledTableCell align="right">Cancelled</StyledTableCell>
+              <StyledTableCell align="right">Issued</StyledTableCell>
+              <StyledTableCell>Returned</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {borrows.map((borrow) => (
-              <StyledTableRow key={borrow.id}>
+              <StyledTableRow key={borrow.bookId}>
                 <StyledTableCell component="th" scope="row">
-                  <Button onClick={() => onEdit(user)}>
-                    <EditIcon />
-                  </Button>
-                  <Button onClick={() => deleteBook(borrow.)}>
+                  {/* <Button onClick={() => deleteBook(borrow.id)}>
                     <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
-                  </Button>
+                  </Button> */}
+                  {borrow.bookCode}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
-                  {user.id}
+                  {borrow.bookId}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {user.firstName}
+                  {borrow.bookCode}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {user.middleName}
+                  {borrow.isApproved ? "gregnth" : "rrrr"}
                 </StyledTableCell>
-                <StyledTableCell align="right">{user.lastName}</StyledTableCell>
                 <StyledTableCell align="right">
-                  {user.contactNumber}
+                  {borrow.isCancelled}
                 </StyledTableCell>
-                <StyledTableCell align="right">{user.role}</StyledTableCell>
+                <StyledTableCell align="right">
+                  {borrow.isIssued}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {borrow.isReturned}
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
@@ -175,7 +180,7 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
   );
 }
 export const getServerSideProps: GetServerSideProps = async () => {
-  const borrows = await borrowController.getAllByUserEmail();
+  const borrows = await borrowController.getAllByUserEmail(String(userEmail));
 
   return {
     props: {

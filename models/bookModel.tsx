@@ -27,5 +27,15 @@ export interface borrowBooks {
     bookId: number;
     bookCode: string;
     email: string;
-  };
+    isIssued: boolean;
+    issuedDate: boolean;
+    userId: string;
+    DateReturned: boolean;
+    targetreturnDate: boolean;
+    creationDate: boolean;
+    isApproved: boolean;
+    isCancelled: boolean;
+    isReturned: boolean;
+    id: number;
+  }[];
 }

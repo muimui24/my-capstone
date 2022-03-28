@@ -1,17 +1,17 @@
-import { m_books } from '@prisma/client';
-import { json } from 'node:stream/consumers';
-import { useState } from 'react';
-import { FormData } from '../models/ebookModel';
-import { config } from '../config';
+import { m_books } from "@prisma/client";
+import { json } from "node:stream/consumers";
+import { useState } from "react";
+import { FormData } from "../models/ebookModel";
+import { config } from "../config";
 
 export async function create(data: FormData) {
   try {
-    fetch(`${config.url}/api/ebook`, {
+    fetch(`http://localhost:3000/api/ebook`, {
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'POST',
+      method: "POST",
     }).then(() => {
       return;
     });
@@ -21,11 +21,11 @@ export async function create(data: FormData) {
 }
 export async function deleteBook(id: number) {
   try {
-    fetch(`${config.url}/api/e-book/${id}`, {
+    fetch(`http://localhost:3000/api/e-book/${id}`, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'DELETE',
+      method: "DELETE",
     }).then((res) => {
       return res.json();
     });
@@ -35,12 +35,12 @@ export async function deleteBook(id: number) {
 }
 export async function updateBook(id: number, data: FormData) {
   try {
-    fetch(`${config.url}/api/e-book/${id}`, {
+    fetch(`http://localhost:3000/api/e-book/${id}`, {
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'PUT',
+      method: "PUT",
     }).then(() => {
       return data;
     });
@@ -50,8 +50,8 @@ export async function updateBook(id: number, data: FormData) {
 }
 export async function getAll() {
   try {
-    const res = await fetch(`${config.url}/api/ebook`, {
-      method: 'GET',
+    const res = await fetch(`http://localhost:3000/api/ebook`, {
+      method: "GET",
     });
     const x = await res.json();
     console.log(x);

@@ -42,3 +42,17 @@ export async function cancel(id: number) {
     console.log(error);
   }
 }
+export async function approve(id: number) {
+  try {
+    fetch(`http://localhost:3000/api/borrow/approve/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    }).then((res) => {
+      return res.body;
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

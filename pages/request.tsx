@@ -125,9 +125,7 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
     userController.deleteBook(id);
     refreshData();
   };
-  if (session?.user?.name !== "admin") {
-    return router.push("/");
-  }
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -146,12 +144,12 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
           </TableHead>
           <TableBody>
             {borrows.map((borrow) => (
-              <StyledTableRow key={borrow.bookId}>
+              <StyledTableRow key={borrow.id}>
                 <StyledTableCell component="th" scope="row">
                   {/* <Button onClick={() => deleteBook(borrow.id)}>
                     <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                   </Button> */}
-                  {borrow.bookCode}
+                  {borrow.id}
                 </StyledTableCell>
                 <StyledTableCell component="th" scope="row">
                   {borrow.bookId}
@@ -160,16 +158,16 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
                   {borrow.bookCode}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {borrow.isApproved ? "gregnth" : "rrrr"}
+                  {borrow.isApproved ? "Approved" : "Pending"}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {borrow.isCancelled}
+                  {borrow.isCancelled ? "Cancelled" : "Pending"}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {borrow.isIssued}
+                  {borrow.isIssued ? "Issued" : "Pending"}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {borrow.isReturned}
+                  {borrow.isReturned ? "Returned" : "Not yet returned"}
                 </StyledTableCell>
               </StyledTableRow>
             ))}

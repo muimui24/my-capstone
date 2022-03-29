@@ -216,16 +216,14 @@ export default function CustomizedTables({ users }: user) {
       >
         ADD USER
       </Button>
-      <Button variant="outlined" startIcon={<SearchIcon />} sx={{ m: "6px" }}>
-        Search USER
-      </Button>
+
       <Divider />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>Action</StyledTableCell>
-              <StyledTableCell>ID</StyledTableCell>
+
               <StyledTableCell align="right">First Name</StyledTableCell>
               <StyledTableCell align="right">Middle Name</StyledTableCell>
 
@@ -245,9 +243,7 @@ export default function CustomizedTables({ users }: user) {
                     <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                   </Button>
                 </StyledTableCell>
-                <StyledTableCell component="th" scope="row">
-                  {user.id}
-                </StyledTableCell>
+
                 <StyledTableCell align="right">
                   {user.firstName}
                 </StyledTableCell>

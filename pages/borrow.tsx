@@ -62,14 +62,22 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
 
   const handleSubmit = (data: cancelRequest) => {
     borrowController.approve(data.id);
+    refreshData();
     console.log(data.id);
   };
   const handleSubmitI = (data: cancelRequest) => {
     borrowController.issue(data.id);
+    refreshData();
     console.log(data.id);
   };
   const handleSubmitR = (data: returnRequest) => {
     borrowController.returnBook(data.id, data);
+    refreshData();
+    console.log(data.id);
+  };
+  const handleSubmitRj = (data: cancelRequest) => {
+    borrowController.reject(data.id);
+    refreshData();
     console.log(data.id);
   };
 
@@ -93,10 +101,17 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
       bookCondtion: "",
     });
   };
+  const handleClickOpenRj = (id: number) => {
+    setOpenRj(true);
+    setForm({
+      id: id,
+    });
+  };
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [openI, setOpenI] = React.useState(false);
   const [openR, setOpenR] = React.useState(false);
+  const [openRj, setOpenRj] = React.useState(false);
   const { data: session, status } = useSession();
 
   const refreshData = () => {
@@ -112,13 +127,18 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
   const handleCloseR = () => {
     setOpenR(false);
   };
+  const handleCloseRj = () => {
+    setOpenRj(false);
+  };
   if (status === "loading") {
     return <h1>loading</h1>;
   }
   if (session == undefined) {
     signIn();
   }
-
+  if (session?.user?.name !== "admin") {
+    return router.push("/");
+  }
   const deleteBook = (id: string) => {
     userController.deleteBook(id);
     refreshData();
@@ -133,6 +153,8 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
 
   return (
     <>
+      <h2>Book Requests</h2>
+
       <Dialog open={open}>
         <DialogTitle>Approve Request?</DialogTitle>
         <DialogContent> </DialogContent>
@@ -141,12 +163,30 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
             onClick={() => {
               {
                 handleSubmit(form);
+                handleClose();
               }
             }}
           >
             Confirm
           </Button>
           <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openRj}>
+        <DialogTitle>Issued?</DialogTitle>
+        <DialogContent> </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              {
+                handleSubmitRj(form);
+                handleCloseRj();
+              }
+            }}
+          >
+            Confirm
+          </Button>
+          <Button onClick={handleCloseRj}>Close</Button>
         </DialogActions>
       </Dialog>
       <Dialog open={openI}>
@@ -157,6 +197,7 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
             onClick={() => {
               {
                 handleSubmitI(form);
+                handleCloseI();
               }
             }}
           >
@@ -186,6 +227,7 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
             onClick={() => {
               {
                 handleSubmitR(returnform);
+                handleClose();
               }
             }}
           >
@@ -202,48 +244,51 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
               <StyledTableCell></StyledTableCell>
               <StyledTableCell align="left">Borrower</StyledTableCell>
               <StyledTableCell align="left">Dated Borrow</StyledTableCell>
-              <StyledTableCell align="left">Book Code</StyledTableCell>
-              <StyledTableCell align="left">Book</StyledTableCell>
+              <StyledTableCell align="left">Book Title</StyledTableCell>
 
-              <StyledTableCell align="left">Approved</StyledTableCell>
-              <StyledTableCell align="left">Approval Date</StyledTableCell>
-              <StyledTableCell align="left">Issued</StyledTableCell>
-              <StyledTableCell align="left">Issued Date</StyledTableCell>
-              <StyledTableCell align="left">Returned</StyledTableCell>
-              <StyledTableCell align="left">Returned Date</StyledTableCell>
-              <StyledTableCell align="left">Rejected</StyledTableCell>
-              <StyledTableCell align="left">Rejection Date</StyledTableCell>
-              <StyledTableCell align="left">
-                Reason For Rejection
-              </StyledTableCell>
+              <StyledTableCell align="left">Date of Approval</StyledTableCell>
+              <StyledTableCell align="left">Date Issued</StyledTableCell>
+              <StyledTableCell align="left">Date of Returned</StyledTableCell>
+              <StyledTableCell align="left">Status</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filtered.map((borrow) => (
               <StyledTableRow key={borrow.id}>
                 <StyledTableCell component="th" scope="row">
-                  {!borrow.isApproved ? (
+                  {!borrow.isApproved && !borrow.isReject ? (
                     <div>
                       <Button
                         onClick={() => {
                           handleClickOpen(borrow.id);
                         }}
                       >
-                        <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                         Approve
                       </Button>
-                      <Button onClick={() => {}}>
-                        <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
+                      <Button
+                        onClick={() => {
+                          handleClickOpenRj(borrow.id);
+                        }}
+                      >
                         Reject
                       </Button>
                     </div>
+                  ) : !borrow.isApproved &&
+                    borrow.isReject ? null : borrow.isApproved &&
+                    !borrow.isIssued ? (
+                    <Button
+                      onClick={() => {
+                        handleClickOpenI(borrow.id);
+                      }}
+                    >
+                      Issued
+                    </Button>
                   ) : borrow.isApproved && !borrow.isIssued ? (
                     <Button
                       onClick={() => {
                         handleClickOpenI(borrow.id);
                       }}
                     >
-                      <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                       Issued
                     </Button>
                   ) : borrow.isApproved &&
@@ -254,7 +299,6 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
                         handleClickOpenR(borrow.id);
                       }}
                     >
-                      <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                       Return
                     </Button>
                   ) : null}
@@ -266,37 +310,42 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
                   {formatDate(borrow.creationDate)}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {borrow.bookCode}
-                </StyledTableCell>
-                <StyledTableCell align="left">
                   {borrow.book.title}
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isApproved ? "Approved" : "Pending"}
-                </StyledTableCell>
+
                 <StyledTableCell align="center">
                   {borrow.isApproved ? formatDate(borrow.approvalDate) : "-"}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isIssued ? "Issued" : "Pending"}
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   {borrow.isIssued ? formatDate(borrow.issuedDate) : "-"}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {borrow.isReturned ? "Returned" : "Not yet returned"}
-                </StyledTableCell>
-                <StyledTableCell align="center">
                   {borrow.isReturned ? formatDate(borrow.DateReturned) : "-"}
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isReject}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isReject ? formatDate(borrow.rejectionDate) : "-"}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.reasonForRejection}
+                <StyledTableCell align="left">
+                  {!borrow.isApproved && !borrow.isReject ? (
+                    <div>Pending..</div>
+                  ) : borrow.isApproved &&
+                    !borrow.isReject &&
+                    !borrow.isIssued &&
+                    !borrow.isReturned ? (
+                    <div>Request Approved</div>
+                  ) : !borrow.isApproved &&
+                    borrow.isReject &&
+                    !borrow.isIssued &&
+                    !borrow.isReturned ? (
+                    <div>Rejected</div>
+                  ) : borrow.isApproved &&
+                    borrow.isIssued &&
+                    !borrow.isReject &&
+                    !borrow.isReturned ? (
+                    <div>Issued</div>
+                  ) : borrow.isApproved &&
+                    borrow.isIssued &&
+                    borrow.isReturned &&
+                    !borrow.isReject ? (
+                    <div>Returned</div>
+                  ) : null}
                 </StyledTableCell>
               </StyledTableRow>
             ))}

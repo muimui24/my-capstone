@@ -7,7 +7,9 @@ import { useRouter } from "next/router";
 import { red } from "@mui/material/colors";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { getSession } from "next-auth/react";
-
+import MessageIcon from "@mui/icons-material/Message";
+import BookIcon from "@mui/icons-material/Book";
+import BookOnlineIcon from "@mui/icons-material/BookOnline";
 import {
   ExtendList,
   List,
@@ -72,7 +74,10 @@ export default function MenuList(open: any) {
           >
             <LibraryBooksRoundedIcon />
           </ListItemIcon>
-          <ListItemText primary="E-Books" sx={{ opacity: open ? 1 : 0 }} />
+          <ListItemText
+            primary="Manage E-Books"
+            sx={{ opacity: open ? 1 : 0 }}
+          />
         </ListItemButton>
         <ListItemButton
           onClick={() => router.push("/books")}
@@ -92,7 +97,7 @@ export default function MenuList(open: any) {
           >
             <MenuBookOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary="Books" sx={{ opacity: open ? 1 : 0 }} />
+          <ListItemText primary="Manage Books" sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
         <ListItemButton
           onClick={() => router.push("/users")}
@@ -112,7 +117,67 @@ export default function MenuList(open: any) {
           >
             <ManageAccountsIcon />
           </ListItemIcon>
-          <ListItemText primary="Books" sx={{ opacity: open ? 1 : 0 }} />
+          <ListItemText primary="Manage Users" sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+        <ListItemButton
+          onClick={() => router.push("/borrow")}
+          key="Manage Accounts"
+          sx={{
+            minHeight: 48,
+            justifyContent: open ? "initial" : "center",
+            px: 2.5,
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              mr: open ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            <MessageIcon />
+          </ListItemIcon>
+          <ListItemText primary="Requests" sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+        <ListItemButton
+          onClick={() => router.push("/userEbook")}
+          key="Manage Accounts"
+          sx={{
+            minHeight: 48,
+            justifyContent: open ? "initial" : "center",
+            px: 2.5,
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              mr: open ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            <BookIcon />
+          </ListItemIcon>
+          <ListItemText primary="Ebooks" sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+        <ListItemButton
+          onClick={() => router.push("/userbooks")}
+          key="Manage Accounts"
+          sx={{
+            minHeight: 48,
+            justifyContent: open ? "initial" : "center",
+            px: 2.5,
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              mr: open ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            <BookOnlineIcon />
+          </ListItemIcon>
+          <ListItemText primary="Libray Books" sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
       </List>
     );
@@ -178,6 +243,27 @@ export default function MenuList(open: any) {
             <LibraryBooksRoundedIcon />
           </ListItemIcon>
           <ListItemText primary="E-Books" sx={{ opacity: open ? 1 : 0 }} />
+        </ListItemButton>
+
+        <ListItemButton
+          onClick={() => router.push("/request")}
+          key="Manage Accounts"
+          sx={{
+            minHeight: 48,
+            justifyContent: open ? "initial" : "center",
+            px: 2.5,
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              mr: open ? 3 : "auto",
+              justifyContent: "center",
+            }}
+          >
+            <MessageIcon />
+          </ListItemIcon>
+          <ListItemText primary="Requests" sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
       </List>
     );

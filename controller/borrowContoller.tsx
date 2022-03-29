@@ -7,7 +7,7 @@ import {
 
 export async function getAllByUserEmail() {
   try {
-    const res = fetch(`http://localhost:3000/api/borrow`, {
+    const res = fetch(`hhttps://olemr.herokuapp.com/api/borrow`, {
       method: "GET",
     });
     const x = await (await res).json();
@@ -19,7 +19,7 @@ export async function getAllByUserEmail() {
 }
 export async function updateBook(id: number, data: borrowBook) {
   try {
-    fetch(`http://localhost:3000/api/book/${id}`, {
+    fetch(`https://olemr.herokuapp.com/api/book/${id}`, {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export async function updateBook(id: number, data: borrowBook) {
 
 export async function cancel(id: number) {
   try {
-    fetch(`http://localhost:3000/api/borrow/cancel/${id}`, {
+    fetch(`https://olemr.herokuapp.com/api/borrow/cancel/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -49,7 +49,7 @@ export async function cancel(id: number) {
 }
 export async function approve(id: number) {
   try {
-    fetch(`http://localhost:3000/api/borrow/approve/${id}`, {
+    fetch(`https://olemr.herokuapp.com/api/borrow/approve/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -63,7 +63,7 @@ export async function approve(id: number) {
 }
 export async function issue(id: number) {
   try {
-    fetch(`http://localhost:3000/api/borrow/Issue/${id}`, {
+    fetch(`https://olemr.herokuapp.com/api/borrow/Issue/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -77,7 +77,7 @@ export async function issue(id: number) {
 }
 export async function reject(id: number) {
   try {
-    fetch(`http://localhost:3000/api/borrow/Reject/${id}`, {
+    fetch(`https://olemr.herokuapp.com/api/borrow/Reject/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -93,7 +93,7 @@ export async function reject(id: number) {
 export async function returnBook(id: number, data: returnRequest) {
   try {
     console.log(data);
-    fetch(`http://localhost:3000/api/borrow/return/${id}`, {
+    fetch(`https://olemr.herokuapp.comapi/borrow/return/${id}`, {
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",

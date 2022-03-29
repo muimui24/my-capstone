@@ -172,9 +172,7 @@ export default function CustomizedTables({ books }: book) {
       >
         Add Book
       </Button>
-      <Button variant="outlined" startIcon={<SearchIcon />} sx={{ m: "6px" }}>
-        Search BOOK
-      </Button>
+
       <Divider />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">

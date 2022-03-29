@@ -1,15 +1,15 @@
-import { m_books } from '@prisma/client';
-import { json } from 'node:stream/consumers';
-import { useState } from 'react';
-import { FormData } from '../models/userModel';
+import { m_books } from "@prisma/client";
+import { json } from "node:stream/consumers";
+import { useState } from "react";
+import { FormData } from "../models/userModel";
 export async function create(data: FormData) {
   try {
-    fetch(`http://localhost:3000/api/user`, {
+    fetch(`https://olemr.herokuapp.com/api/user`, {
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'POST',
+      method: "POST",
     }).then(() => {
       return;
     });
@@ -19,11 +19,11 @@ export async function create(data: FormData) {
 }
 export async function deleteBook(id: string) {
   try {
-    fetch(`http://localhost:3000/api/users/${id}`, {
+    fetch(`https://olemr.herokuapp.com/api/users/${id}`, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'DELETE',
+      method: "DELETE",
     }).then((res) => {
       return res.json();
     });
@@ -36,9 +36,9 @@ export async function updateBook(id: string, data: FormData) {
     fetch(`http://localhost:3000/api/users/${id}`, {
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'PUT',
+      method: "PUT",
     }).then(() => {
       return data;
     });
@@ -49,7 +49,7 @@ export async function updateBook(id: string, data: FormData) {
 export async function getAll() {
   try {
     const res = await fetch(`http://localhost:3000/api/user`, {
-      method: 'GET',
+      method: "GET",
     });
     const x = await res.json();
     console.log(x);

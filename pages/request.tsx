@@ -84,6 +84,9 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
   if (session == undefined) {
     signIn();
   }
+  if (session?.user?.name == "admin") {
+    return router.push("/");
+  }
 
   const deleteBook = (id: string) => {
     userController.deleteBook(id);
@@ -117,34 +120,28 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
-
+      <h2>My Request</h2>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell></StyledTableCell>
-              <StyledTableCell align="left">Dated Borrow</StyledTableCell>
-              <StyledTableCell align="left">Book Code</StyledTableCell>
-              <StyledTableCell align="left">Book</StyledTableCell>
+              <StyledTableCell align="left">Book Title</StyledTableCell>
+              <StyledTableCell align="left">Status</StyledTableCell>
 
-              <StyledTableCell align="left">Approved</StyledTableCell>
               <StyledTableCell align="left">Approval Date</StyledTableCell>
-              <StyledTableCell align="left">Issued</StyledTableCell>
               <StyledTableCell align="left">Issued Date</StyledTableCell>
-              <StyledTableCell align="left">Returned</StyledTableCell>
               <StyledTableCell align="left">Returned Date</StyledTableCell>
-              <StyledTableCell align="left">Rejected</StyledTableCell>
-              <StyledTableCell align="left">Rejection Date</StyledTableCell>
-              <StyledTableCell align="left">
-                Reason For Rejection
-              </StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filtered.map((borrow) => (
               <StyledTableRow key={borrow.id}>
                 <StyledTableCell component="th" scope="row">
-                  {!borrow.isApproved ? (
+                  {!borrow.isApproved &&
+                  borrow.isIssued &&
+                  borrow.isReject &&
+                  borrow.isReturned ? (
                     <Button
                       onClick={() => {
                         {
@@ -152,46 +149,46 @@ export default function CustomizedTables({ borrows }: borrowBooks) {
                         }
                       }}
                     >
-                      <DeleteIcon type="button" sx={{ color: "#ef5350" }} />
                       Cancel
                     </Button>
                   ) : null}
                 </StyledTableCell>
                 <StyledTableCell align="left">
-                  {formatDate(borrow.creationDate)}
-                </StyledTableCell>
-                <StyledTableCell align="left">
-                  {borrow.bookCode}
-                </StyledTableCell>
-                <StyledTableCell align="left">
                   {borrow.book.title}
                 </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isApproved ? "Approved" : "Pending"}
+                <StyledTableCell align="left">
+                  {!borrow.isApproved && !borrow.isReject ? (
+                    <div>Pending..</div>
+                  ) : borrow.isApproved &&
+                    !borrow.isReject &&
+                    !borrow.isIssued &&
+                    !borrow.isReturned ? (
+                    <div>Request Approved</div>
+                  ) : !borrow.isApproved &&
+                    borrow.isReject &&
+                    !borrow.isIssued &&
+                    !borrow.isReturned ? (
+                    <div>Rejected</div>
+                  ) : borrow.isApproved &&
+                    borrow.isIssued &&
+                    !borrow.isReject &&
+                    !borrow.isReturned ? (
+                    <div>Issued</div>
+                  ) : borrow.isApproved &&
+                    borrow.isIssued &&
+                    borrow.isReturned &&
+                    !borrow.isReject ? (
+                    <div>Returned</div>
+                  ) : null}{" "}
                 </StyledTableCell>
-                <StyledTableCell align="center">
+                <StyledTableCell align="left">
                   {borrow.isApproved ? formatDate(borrow.approvalDate) : "-"}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isIssued ? "Issued" : "Pending"}
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   {borrow.isIssued ? formatDate(borrow.issuedDate) : "-"}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {borrow.isReturned ? "Returned" : "Not yet returned"}
-                </StyledTableCell>
-                <StyledTableCell align="center">
                   {borrow.isReturned ? formatDate(borrow.DateReturned) : "-"}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isReject}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.isReject ? formatDate(borrow.rejectionDate) : "-"}
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  {borrow.reasonForRejection}
                 </StyledTableCell>
               </StyledTableRow>
             ))}

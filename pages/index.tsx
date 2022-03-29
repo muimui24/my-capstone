@@ -53,12 +53,6 @@ const Home = () => {
     // return null;
   }
 
-  return (
-    <>
-      <Box style={styles.paperContainer}>
-        Online Library: Ebook Management And Repository
-      </Box>
-    </>
-  );
+  return <></>;
 };
 export default Home;

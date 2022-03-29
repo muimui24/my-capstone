@@ -120,7 +120,7 @@ export default function MenuList(open: any) {
           <ListItemText primary="Manage Users" sx={{ opacity: open ? 1 : 0 }} />
         </ListItemButton>
         <ListItemButton
-          onClick={() => router.push("/borrow")}
+          onClick={() => router.push("/users")}
           key="Manage Accounts"
           sx={{
             minHeight: 48,
